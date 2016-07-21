@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zs.com.wuzhi.layout.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/squareLayout_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+    <TextView
+        android:id="@+id/squareLayout_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:background="#88000000"
+        android:textColor="#b3cccccc"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/grid_item_press"
+        />
+</zs.com.wuzhi.layout.SquareLayout>
