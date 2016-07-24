@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/primary_empty"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        ></View>
+
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true">
+
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="头像"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/author"/>
+        <ImageView
+            style="@style/arrow"/>
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true">
+
+        <TextView
+           style="@style/linear_item_tv"
+            android:text="昵称"/>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/bitwhite"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:maxEms="10"
+            android:text="谎"/>
+        <ImageView
+            style="@style/arrow"/>
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true">
+
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="签名"/>
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/bitwhite"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:maxEms="10"
+            android:text="时间是贼偷走一切带不走我的眼泪"/>
+        <ImageView
+            style="@style/arrow"/>
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+</LinearLayout>

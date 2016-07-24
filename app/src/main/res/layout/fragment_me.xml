@@ -1,10 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+    <LinearLayout
+        android:id="@+id/my_diary_ll"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="me"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true"
+        >
+        <TextView
+           style="@style/linear_item_tv"
+            android:text="我的日记"/>
+        <ImageView
+            style="@style/arrow"/>
 
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+    <LinearLayout
+        android:id="@+id/my_setting_ll"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true"
+        >
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="个人设置"/>
+        <ImageView
+            style="@style/arrow"/>
+
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+
+    <LinearLayout
+        android:id="@+id/my_primary"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
+        android:clickable="true"
+        >
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="隐私"/>
+        <ImageView
+            style="@style/arrow"/>
+
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
 </LinearLayout>

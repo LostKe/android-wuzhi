@@ -3,6 +3,11 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!-- 设置了numColumns=auto_file 属性后，设置默认的宽度，系统会在默认的宽度上给每一列的view平均
+       去分配多余的属性
+
+    -->
     <GridView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
