@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
-import zs.com.wuzhi.MainActivity;
 import zs.com.wuzhi.R;
 
 /**
@@ -58,4 +57,5 @@ public class WelcomeActivity  extends Activity{
         startActivity(intent);
         finish();
     }
+
 }

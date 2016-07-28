@@ -1,8 +1,7 @@
-package zs.com.wuzhi;
+package zs.com.wuzhi.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,8 +10,13 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import zs.com.wuzhi.MainTab;
+import zs.com.wuzhi.R;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by zhangshuqing on 16/7/26.
+ */
+public class MainActivity extends BaseToolBarActivity{
 
 
     @BindView(R.id.tabHost)
@@ -26,6 +30,22 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    public boolean isBackHomeVisible() {
+        return false;
+    }
+
+    @Override
+    public String getToolBarTitle() {
+        return getResources().getString(R.string.app_name);
+    }
+
+    @Override
+    public BaseToolBarActivity.OnBackHomeClicklistener getOnBackHomeListener() {
+        return null;
+    }
+
+
     private void initView() {
         mTabHost.setup(this,getSupportFragmentManager(),R.id.tab_content);
         initTabs();
@@ -35,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private void initTabs() {
         MainTab[] tabs= MainTab.values();
         for (int i=0;i<tabs.length;i++){
-           MainTab tab= tabs[i];
+            MainTab tab= tabs[i];
             TabHost.TabSpec spec=mTabHost.newTabSpec(tab.getTag());
-            View indicator=LayoutInflater.from(this).inflate(R.layout.tab_indicator,null);
+            View indicator= LayoutInflater.from(this).inflate(R.layout.tab_indicator,null);
             ImageView icon_iv= (ImageView) indicator.findViewById(R.id.iv_icon);
             icon_iv.setImageResource(tab.getResId());
             TextView tab_title= (TextView) indicator.findViewById(R.id.tab_title);
@@ -48,3 +68,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+

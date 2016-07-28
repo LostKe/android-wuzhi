@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="zs.com.wuzhi.MainActivity">
+    tools:context=".activity.WelcomeActivity$MainActivity">
 
     <FrameLayout
         android:id="@+id/tab_content"
