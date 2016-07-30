@@ -268,9 +268,11 @@ public class SwitchView extends View {
                     invalidate();
 
                     if (state == STATE_SWITCH_OFF2) {
-                        listener.toggleToOn(this);
+                        toggleSwitch(STATE_SWITCH_ON);
+                        listener.toggleToOn();
                     } else if (state == STATE_SWITCH_ON2) {
-                        listener.toggleToOff(this);
+                        toggleSwitch(STATE_SWITCH_OFF);
+                        listener.toggleToOff();
                     }
                     break;
             }
@@ -335,19 +337,19 @@ public class SwitchView extends View {
     }
 
     public interface OnStateChangedListener {
-        void toggleToOn(View view);
+        void toggleToOn();
 
-        void toggleToOff(View view);
+        void toggleToOff();
     }
 
     private OnStateChangedListener listener = new OnStateChangedListener() {
         @Override
-        public void toggleToOn(View view) {
+        public void toggleToOn() {
             toggleSwitch(STATE_SWITCH_ON);
         }
 
         @Override
-        public void toggleToOff(View view) {
+        public void toggleToOff() {
             toggleSwitch(STATE_SWITCH_OFF);
         }
     };

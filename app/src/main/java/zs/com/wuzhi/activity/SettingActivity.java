@@ -1,5 +1,6 @@
 package zs.com.wuzhi.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,11 +9,12 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.util.Constant;
 
 /**
  * Created by zhangshuqing on 16/7/24.
  */
-public class SettingActivity extends BaseToolBarActivity implements View.OnClickListener,BaseToolBarActivity.OnBackHomeClicklistener{
+public class SettingActivity extends BaseToolBarActivity implements View.OnClickListener{
 
     @BindView(R.id.ll_setting_pic)
     LinearLayout ll_setting_pic;
@@ -37,6 +39,7 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         return true;
     }
 
+
     @Override
     String getToolBarTitle() {
 
@@ -45,7 +48,12 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
 
     @Override
     public OnBackHomeClicklistener getOnBackHomeListener() {
-        return this;
+        return new OnBackHomeClicklistener() {
+            @Override
+            public void backHomeClick() {
+                finish();
+            }
+        };
     }
 
 
@@ -58,14 +66,22 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
         switch (v.getId()){
             case R.id.ll_setting_pic:
                 //显示大头像，可以上传头像
                     break;
             case R.id.ll_setting_nickname:
                 //修改昵称
+                bundle.putString(Constant.TITLE,"昵称");
+                bundle.putString(Constant.CONTENT,"谎");
+                intent.setClass(this,CommonSubmitActivity.class);
                 break;
             case R.id.ll_setting_sigin:
+                bundle.putString(Constant.TITLE,"签名");
+                bundle.putString(Constant.CONTENT,"时间是贼，偷走一切");
+                intent.setClass(this,CommonSubmitActivity.class);
                 //修改 签名
                 break;
             case R.id.ll_setting_logout:
@@ -73,10 +89,8 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
                 break;
 
         }
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
-    @Override
-    public void backHomeClick() {
-        finish();
-    }
 }

@@ -1,5 +1,6 @@
 package zs.com.wuzhi.fragment;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.activity.LoginActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
 import zs.com.wuzhi.activity.SettingActivity;
 
@@ -19,6 +21,8 @@ import zs.com.wuzhi.activity.SettingActivity;
  * Created by zhangshuqing on 16/7/19.
  */
 public class FragmentMe extends Fragment implements View.OnClickListener{
+
+    Application app;
 
     @BindView(R.id.my_primary)
     LinearLayout mPrimary;
@@ -39,7 +43,6 @@ public class FragmentMe extends Fragment implements View.OnClickListener{
     }
 
     private void init() {
-
         mPrimary.setOnClickListener(this);
         mSetting.setOnClickListener(this);
         mDiary.setOnClickListener(this);
@@ -53,17 +56,22 @@ public class FragmentMe extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        //检查登录状态，未登录跳转到登录界面
         Intent intent=new Intent();
-        switch (v.getId()){
-            case R.id.my_primary:
-                //隐私界面
-                intent.setClass(getContext(), PrimaryActivity.class);
-                break;
-            case R.id.my_setting_ll:
-                intent.setClass(getContext(), SettingActivity.class);
-                break;
-            case R.id.my_diary_ll:
-                break;
+        if(false){
+            intent.setClass(getContext(), LoginActivity.class);
+        }else{
+            switch (v.getId()){
+                case R.id.my_primary:
+                    //隐私界面
+                    intent.setClass(getContext(), PrimaryActivity.class);
+                    break;
+                case R.id.my_setting_ll:
+                    intent.setClass(getContext(), SettingActivity.class);
+                    break;
+                case R.id.my_diary_ll:
+                    break;
+            }
         }
         startActivity(intent);
     }

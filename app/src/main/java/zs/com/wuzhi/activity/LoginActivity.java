@@ -33,8 +33,9 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     @Override
     boolean isBackHomeVisible() {
-        return false;
+        return true;
     }
+
 
     @Override
     String getToolBarTitle() {
@@ -43,8 +44,14 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     @Override
     OnBackHomeClicklistener getOnBackHomeListener() {
-        return null;
+        return new OnBackHomeClicklistener() {
+            @Override
+            public void backHomeClick() {
+                finish();
+            }
+        };
     }
+
 
     @Override
     public void onClick(View v) {
