@@ -12,4 +12,9 @@
     <color name="bitwhite">#FFD2C7C7</color>
     <color name="white">#fff</color>
     <color name="complete">#07a12b</color>
+    <color name="diary_head">#f3f7f4</color>
+    <color name="diary_head_text">#527394</color>
+    <color name="diary_item_text">#323233</color>
+    <color name="day_line_color">#e7e7e7</color>
+    <color name="day_windows_bg">#fafafa</color>
 </resources>

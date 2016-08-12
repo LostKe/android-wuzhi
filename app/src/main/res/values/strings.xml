@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">吾志</string>
     <string name="complete">完成</string>
+    <string name="add_diary_hit">记录生活点滴</string>
 </resources>

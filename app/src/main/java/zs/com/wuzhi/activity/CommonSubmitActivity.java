@@ -36,6 +36,16 @@ public class CommonSubmitActivity extends BaseToolBarActivity {
         Intent intent= getIntent();
         Bundle bundle=intent.getExtras();
         String content=bundle.getString(Constant.CONTENT);
+        int type=bundle.getInt(Constant.ACTION_TYPE);
+        switch (type){
+            case SettingActivity.ACTION_PIC:
+                break;
+            case SettingActivity.ACTION_NICKNAME:
+
+                break;
+            case SettingActivity.ACTION_SIGIN:
+                break;
+        }
         et_common_submit.setText(content);
         //设置光标在文字的末尾处
         et_common_submit.setSelection(content.length());

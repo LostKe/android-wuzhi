@@ -8,10 +8,13 @@ import java.io.Serializable;
 public class Item implements Serializable {
     private String tag;
     private String url;
+    private String href;
 
-    public Item(String url, String tag) {
+    public Item(String url, String tag,String href) {
         this.tag = tag;
         this.url = url;
+        this.href=href;
+
     }
 
     public Item() {
@@ -33,4 +36,11 @@ public class Item implements Serializable {
         this.url = url;
     }
 
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
 }

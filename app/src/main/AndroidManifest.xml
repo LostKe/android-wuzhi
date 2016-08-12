@@ -9,7 +9,7 @@
     <application
         android:name=".application.Wuzhi"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/uz_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -25,6 +25,7 @@
         <activity android:name=".activity.SettingActivity"></activity>
         <activity android:name=".activity.LoginActivity"></activity>
         <activity android:name=".activity.CommonSubmitActivity"></activity>
+        <activity android:name=".activity.AddDiaryActivity"></activity>
     </application>
 
 </manifest>

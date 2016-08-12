@@ -17,7 +17,6 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -27,6 +26,7 @@ import java.util.List;
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.DiaryActivity;
 import zs.com.wuzhi.bean.Item;
+import zs.com.wuzhi.util.Constant;
 import zs.com.wuzhi.util.ConvertUtil;
 import zs.com.wuzhi.util.WuzhiSprider;
 
@@ -74,9 +74,12 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Item item=_items.get(position);
-        String userId= ConvertUtil.getUserId(item.getUrl());
-        Toast.makeText(getContext(),userId,Toast.LENGTH_SHORT).show();
+        String userId= ConvertUtil.getUserId(item.getHref());
         Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        //给子Activity 传递用户id
+        bundle.putString(Constant.USER_ID,userId);
+        intent.putExtras(bundle);
         intent.setClass(getContext(), DiaryActivity.class);
         startActivity(intent);
     }

@@ -61,9 +61,12 @@ public class Constant {
 
 
     ////////////////////////
+    public static final String USER_ID="user_id";
     public static final String TITLE="title";
     public static final String SUB_CLASS="sub_class";
     public static final String CONTENT="content";
+    public static final String ACTION_TYPE="action_type";
+
 
 
 

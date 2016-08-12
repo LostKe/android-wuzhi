@@ -24,7 +24,9 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
     LinearLayout ll_setting_sigin;
     @BindView(R.id.ll_setting_logout)
     LinearLayout ll_setting_logout;
-
+    public static  final int ACTION_PIC=1;
+    public static final int ACTION_NICKNAME=2;
+    public static final int ACTION_SIGIN=3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,23 +76,27 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
                     break;
             case R.id.ll_setting_nickname:
                 //修改昵称
+                bundle.putInt(Constant.ACTION_TYPE,ACTION_NICKNAME);
                 bundle.putString(Constant.TITLE,"昵称");
                 bundle.putString(Constant.CONTENT,"谎");
                 intent.setClass(this,CommonSubmitActivity.class);
                 break;
             case R.id.ll_setting_sigin:
+                bundle.putInt(Constant.ACTION_TYPE,ACTION_SIGIN);
                 bundle.putString(Constant.TITLE,"签名");
                 bundle.putString(Constant.CONTENT,"时间是贼，偷走一切");
                 intent.setClass(this,CommonSubmitActivity.class);
                 //修改 签名
                 break;
             case R.id.ll_setting_logout:
-                //退出登录
+                //退出登录 回到首页
+                intent.setClass(this,MainActivity.class);
                 break;
 
         }
         intent.putExtras(bundle);
         startActivity(intent);
+
     }
 
 }
