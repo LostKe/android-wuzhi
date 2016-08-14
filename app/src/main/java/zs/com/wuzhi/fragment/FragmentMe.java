@@ -16,11 +16,13 @@ import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.LoginActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
 import zs.com.wuzhi.activity.SettingActivity;
+import zs.com.wuzhi.application.AppApplication;
+import zs.com.wuzhi.util.Constant;
 
 /**
  * Created by zhangshuqing on 16/7/19.
  */
-public class FragmentMe extends Fragment implements View.OnClickListener{
+public class FragmentMe extends Fragment implements View.OnClickListener {
 
     Application app;
 
@@ -36,8 +38,8 @@ public class FragmentMe extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =inflater.inflate(R.layout.fragment_me,null);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_me, null);
+        ButterKnife.bind(this, view);
         init();
         return view;
     }
@@ -57,22 +59,35 @@ public class FragmentMe extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         //检查登录状态，未登录跳转到登录界面
-        Intent intent=new Intent();
-        if(false){
-            intent.setClass(getContext(), LoginActivity.class);
-        }else{
-            switch (v.getId()){
-                case R.id.my_primary:
-                    //隐私界面
-                    intent.setClass(getContext(), PrimaryActivity.class);
-                    break;
-                case R.id.my_setting_ll:
-                    intent.setClass(getContext(), SettingActivity.class);
-                    break;
-                case R.id.my_diary_ll:
-                    break;
-            }
+        Intent intent = new Intent();
+        switch (v.getId()) {
+            case R.id.my_primary:
+                checkLogin(intent, PrimaryActivity.class);
+                break;
+            case R.id.my_setting_ll:
+                checkLogin(intent, SettingActivity.class);
+                break;
+            case R.id.my_diary_ll:
+
+                break;
+
         }
         startActivity(intent);
     }
+
+
+    private void checkLogin(Intent intent, Class clz) {
+        if (!AppApplication.context().isLogin()) {
+            //检查是否已经登录，未登录跳转到登录界面
+            Bundle bundle = new Bundle();
+            intent.setClass(getContext(), LoginActivity.class);
+            bundle.putString(Constant.NEXT_ACTIVITY, clz.getName());
+            intent.putExtra(Constant.SETTING_BUNDLE,bundle);
+        } else {
+            intent.setClass(getContext(), clz);
+        }
+
+    }
+
+
 }

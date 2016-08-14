@@ -9,6 +9,9 @@ public class ConvertUtil {
         int index=imgurl.lastIndexOf("/")+1;
         String longId=imgurl.substring(index);
         return longId;
-
     }
+
+    
+
+
 }

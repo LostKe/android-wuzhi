@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,12 +41,18 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
     GridView gridView;
     GridViewAdpter gridViewAdapter;
     List<Item> _items;
+
+    KProgressHUD hud;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragement_now,null);
         swipeRefreshLayout= (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         initSwipeRefreshLayout(view);
+        hud=KProgressHUD.create(getContext()).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setLabel("Please wait")
+                .setCancellable(true);
+        hud.show();
         return view;
     }
 
@@ -59,7 +66,7 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
             @Override
             public void onRefresh() {
                 refresh();
-                swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
@@ -164,6 +171,11 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
             gridViewAdapter=new GridViewAdpter();
             gridView.setAdapter(gridViewAdapter);
             gridViewAdapter.notifyDataSetChanged();
+            hud.dismiss();
+            if(swipeRefreshLayout!=null){
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
         }
     }
 

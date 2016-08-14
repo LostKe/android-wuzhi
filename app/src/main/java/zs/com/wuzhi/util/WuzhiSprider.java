@@ -66,7 +66,6 @@ public class WuzhiSprider {
             document.outputSettings(new Document.OutputSettings().prettyPrint(false));
             Elements elements=document.select("div[class=date_line]");
             String date=elements.get(0).select("span[class=span-10]").get(0).html();
-
             date=date.replaceAll("&nbsp;","");
             personDiary.setCurrent(date);
             String flower=elements.get(0).select("span[class=span-3 last]").get(0).html();

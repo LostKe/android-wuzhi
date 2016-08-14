@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,6 +44,9 @@ public class DiaryActivity extends BaseToolBarActivity {
 
     PersonDiary personDiary;
 
+    private KProgressHUD hud;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,8 @@ public class DiaryActivity extends BaseToolBarActivity {
         Intent intent = getIntent();
         String user_id = intent.getExtras().getString(Constant.USER_ID);
 
+        hud=KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.show();
         Handler diaryHandler = new DiaryMessageHandler();
         new InitContentThread(diaryHandler, user_id).start();
 
@@ -142,6 +149,7 @@ public class DiaryActivity extends BaseToolBarActivity {
             //设置日记内容
             DiaryAdpter diaryAdpter = new DiaryAdpter();
             lv_diary_content.setAdapter(diaryAdpter);
+            hud.dismiss();
 
         }
     }

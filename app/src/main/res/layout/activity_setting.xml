@@ -24,9 +24,10 @@
             android:text="头像"/>
 
         <ImageView
+            android:id="@+id/iv_setting"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/author"/>
+            />
         <ImageView
             style="@style/arrow"/>
     </LinearLayout>
@@ -45,6 +46,7 @@
             android:text="昵称"/>
 
         <TextView
+            android:id="@+id/tv_setting_nickname"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +54,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:maxEms="10"
-            android:text="谎"/>
+            />
         <ImageView
             style="@style/arrow"/>
     </LinearLayout>
@@ -71,6 +73,7 @@
             android:text="签名"/>
 
         <TextView
+            android:id="@+id/tv_setting_signature"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,7 +81,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:maxEms="10"
-            android:text="时间是贼偷走一切带不走我的眼泪"/>
+            />
         <ImageView
             style="@style/arrow"/>
     </LinearLayout>

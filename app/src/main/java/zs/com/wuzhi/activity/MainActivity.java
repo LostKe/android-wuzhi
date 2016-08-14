@@ -97,8 +97,6 @@ public class MainActivity extends BaseToolBarActivity implements View.OnClickLis
         Intent intent=new Intent();
         switch (v.getId()){
             case R.id.quick_option_iv:
-                //检查是否登录，未登录切换到登录界面
-
                 //进去写日记界面
                 intent.setClass(this,AddDiaryActivity.class);
                 break;

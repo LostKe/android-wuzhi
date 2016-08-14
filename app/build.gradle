@@ -27,8 +27,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.1.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'org.jsoup:jsoup:1.9.1'
+    //一款仿IOS dialog的view
+    compile 'com.kaopiz:kprogresshud:1.0.5'
    // compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    //compile 'com.squareup.okhttp3:okhttp:3.3.1'
 }

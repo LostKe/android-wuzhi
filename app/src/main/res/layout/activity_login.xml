@@ -16,7 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:hint="用户名" />
+            android:inputType="textEmailAddress"
+            android:hint="邮箱" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/et_password"

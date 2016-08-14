@@ -4,12 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.application.AppApplication;
+import zs.com.wuzhi.bean.UserInfo;
 import zs.com.wuzhi.util.Constant;
+import zs.com.wuzhi.util.ResponseUtil;
+import zs.com.wuzhi.util.WuzhiApi;
 
 /**
  * Created by zhangshuqing on 16/7/24.
@@ -24,16 +36,39 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
     LinearLayout ll_setting_sigin;
     @BindView(R.id.ll_setting_logout)
     LinearLayout ll_setting_logout;
+
+    @BindView(R.id.iv_setting)
+    ImageView iv_setting;
+
+    @BindView(R.id.tv_setting_nickname)
+    TextView tv_setting_nickname;
+
+    @BindView(R.id.tv_setting_signature)
+    TextView tv_setting_signature;
+
+
+
     public static  final int ACTION_PIC=1;
     public static final int ACTION_NICKNAME=2;
     public static final int ACTION_SIGIN=3;
+
+    KProgressHUD hud;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
+        hud=KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
+
         init();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initUserInfo();
     }
 
     @Override
@@ -44,7 +79,6 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
 
     @Override
     String getToolBarTitle() {
-
         return "个人设置";
     }
 
@@ -64,7 +98,55 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         ll_setting_nickname.setOnClickListener(this);
         ll_setting_sigin.setOnClickListener(this);
         ll_setting_pic.setOnClickListener(this);
+        initUserInfo();
     }
+
+    private void initUserInfo(){
+        hud.show();
+        WuzhiApi.gettAccountInfo(handler);
+    }
+
+    AsyncHttpResponseHandler handler=new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String content=new String(responseBody);
+            //首先获取主页信息
+            String  mineUrl= ResponseUtil.getMineUrl(content);
+
+            WuzhiApi.get(mineUrl, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    String mineContent=new String(responseBody);
+                   UserInfo info= ResponseUtil.getUserInfo(mineContent);
+                    if (info != null) {
+                        tv_setting_nickname.setText(info.getNickName());
+                        tv_setting_signature.setText(info.getSignature());
+                        Glide.with(getApplicationContext()).load(info.getImgUrl()).into(iv_setting);
+                    }
+                    hud.dismiss();
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    hud.dismiss();
+                    Toast.makeText(getApplicationContext(),"获取信息失败，请稍后再试！",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            hud.dismiss();
+            Toast.makeText(getApplicationContext(),"获取信息失败，请稍后再试！",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+
 
     @Override
     public void onClick(View v) {
@@ -78,24 +160,35 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
                 //修改昵称
                 bundle.putInt(Constant.ACTION_TYPE,ACTION_NICKNAME);
                 bundle.putString(Constant.TITLE,"昵称");
-                bundle.putString(Constant.CONTENT,"谎");
+                bundle.putString(Constant.NICKNAME,tv_setting_nickname.getText().toString());
+                bundle.putString(Constant.SIGNATURE,tv_setting_signature.getText().toString());
                 intent.setClass(this,CommonSubmitActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             case R.id.ll_setting_sigin:
                 bundle.putInt(Constant.ACTION_TYPE,ACTION_SIGIN);
+                //修改昵称
                 bundle.putString(Constant.TITLE,"签名");
-                bundle.putString(Constant.CONTENT,"时间是贼，偷走一切");
+                bundle.putString(Constant.NICKNAME,tv_setting_nickname.getText().toString());
+                bundle.putString(Constant.SIGNATURE,tv_setting_signature.getText().toString());
                 intent.setClass(this,CommonSubmitActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 //修改 签名
                 break;
             case R.id.ll_setting_logout:
+                //清除cookie ，
+                AppApplication.context().logout();
                 //退出登录 回到首页
                 intent.setClass(this,MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
 
         }
-        intent.putExtras(bundle);
-        startActivity(intent);
+
+
 
     }
 
