@@ -16,6 +16,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
+        <!-- -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +30,9 @@
             <android.support.v4.app.FragmentTabHost
                 android:id="@+id/tabHost"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v4.app.FragmentTabHost>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" >
+            </android.support.v4.app.FragmentTabHost>
             <!-- 快速操作按钮 -->
             <ImageView
                 android:id="@+id/quick_option_iv"

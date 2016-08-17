@@ -17,4 +17,6 @@
     <color name="diary_item_text">#323233</color>
     <color name="day_line_color">#e7e7e7</color>
     <color name="day_windows_bg">#fafafa</color>
+    <color name="dark">#FFE7E4E4</color>
+    <color name="transparent">#00000000</color>
 </resources>

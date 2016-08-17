@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.LoginActivity;
+import zs.com.wuzhi.activity.MyDiaryActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
 import zs.com.wuzhi.activity.SettingActivity;
 import zs.com.wuzhi.application.AppApplication;
@@ -68,7 +69,7 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
                 checkLogin(intent, SettingActivity.class);
                 break;
             case R.id.my_diary_ll:
-
+                checkLogin(intent, MyDiaryActivity.class);
                 break;
 
         }

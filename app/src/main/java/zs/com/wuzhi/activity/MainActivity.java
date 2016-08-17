@@ -78,13 +78,6 @@ public class MainActivity extends BaseToolBarActivity implements View.OnClickLis
             }
             tab_title.setText(tab.getTag());
             spec.setIndicator(indicator);
-            spec.setContent(new TabHost.TabContentFactory() {
-                @Override
-                public View createTabContent(String tag) {
-                    return new View(MainActivity.this);
-                }
-            });
-
             mTabHost.addTab(spec,tab.getClazz(),null);
 
            // mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
