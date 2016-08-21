@@ -4,20 +4,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.adapter.BaseListAdapter;
+import zs.com.wuzhi.bean.PageBean;
+import zs.com.wuzhi.factory.TextResponseFactory;
 import zs.com.wuzhi.widget.SuperRefreshLayout;
 
 /**
  * Created by zhangshuqing on 16/8/17.
  */
-public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRefreshLayout.SuperRefreshLayoutListener,AdapterView.OnItemClickListener {
+public abstract class BaseListActivity<T> extends BaseToolBarActivity implements SuperRefreshLayout.SuperRefreshLayoutListener, AdapterView.OnItemClickListener, BaseListAdapter.Callback {
 
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_LOADING = 1;
@@ -34,10 +42,20 @@ public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRef
 
     private View mFooterView;
 
-    private ListAdapter mAdapter;
+    protected BaseListAdapter<T> mAdapter;
+
+
+
+    protected PageBean<T> pageBean;
+
+    protected boolean mIsRefresh;
 
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
+
+    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
+
+    protected String CACHE_NAME = getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +72,35 @@ public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRef
                 android.R.color.holo_red_light);
         superRefreshLayout.setSuperRefreshLayoutListener(this);
 
-        mFooterView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_list_view_footer,null);
-        mFooterProgressBar= (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
-        mFooterText= (TextView) mFooterView.findViewById(R.id.tv_footer);
+        mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
+        mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
+        mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
         setFooterType(TYPE_LOADING);
         mListView.addFooterView(mFooterView);
 
-       // superRefreshLayout.onLoadComplete(); 刷新完成
+        initData();
+
     }
 
-    private void initData(){
-        mListView.setAdapter(mAdapter);
-    }
+
+    protected TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            onRequestFinish();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            pageBean =TextResponseFactory.getDefaultFactory().convertToPageBaen(responseString,getType());
+            if (pageBean!=null && pageBean.getItems().size() != 0  ) {
+                    setListData(pageBean);
+            } else {
+                setFooterType(TYPE_NO_MORE);
+            }
+            onRequestFinish();
+        }
+    };
+
 
     @Override
     boolean isBackHomeVisible() {
@@ -77,6 +112,20 @@ public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRef
         return null;
     }
 
+    protected abstract BaseListAdapter<T> getListAdapter();
+
+    protected abstract TextResponseFactory.Type getType();
+
+    protected abstract void setListData(PageBean pageBean);
+
+
+    protected void initData() {
+        mAdapter = getListAdapter();
+        mListView.setAdapter(mAdapter);
+        onRefresh();
+
+
+    }
 
     /**
      * 默认 结束当前Activity
@@ -95,14 +144,37 @@ public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRef
 
     @Override
     public void onRefresh() {
-
+        //刷新数据
+        mIsRefresh = true;
+        requestData();
 
     }
 
     @Override
     public void onLoadMore() {
-
+        //加载下一页数据
+        requestData();
     }
+
+    protected void requestData() {
+        requestDataStart();
+        setFooterType(TYPE_LOADING);
+    }
+
+    protected void onRequestFinish() {
+        onComplete();
+    }
+
+    protected void onComplete() {
+        superRefreshLayout.onLoadComplete();
+        mIsRefresh = false;
+    }
+
+
+    /**
+     * 子类实现请求数据
+     */
+    public abstract void requestDataStart();
 
 
     protected void setFooterType(int type) {
@@ -128,8 +200,6 @@ public class BaseListActivity<T> extends BaseToolBarActivity implements SuperRef
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
+    public abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
 
 }

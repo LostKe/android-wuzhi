@@ -13,6 +13,7 @@ public class DayDiary {
     //当前日期所包含的日记(一天之内可能写了多份日记)
     private List<Diary> diarys;
 
+
     public String getCurrentDay() {
         return currentDay;
     }
