@@ -55,11 +55,11 @@ public class MyDiaryActivity extends BaseListActivity {
         if(mIsRefresh){
             mAdapter.clear();
             mAdapter.addItem(pageBean.getItems());
-            mIsRefresh=false;
+
         }else{
             mAdapter.addItem(pageBean.getItems());
         }
-
+        mIsRefresh=false;
         if(TextUtils.isEmpty(pageBean.getNextPage()) && !TextUtils.isEmpty(pageBean.getLastPage())){
             superRefreshLayout.setNoMoreData();
             setFooterType(TYPE_NO_MORE);

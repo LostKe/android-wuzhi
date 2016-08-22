@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.util.concurrent.ExecutorService;
@@ -44,7 +45,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
     protected BaseListAdapter<T> mAdapter;
 
-
+    protected boolean isFirstLoad = true;
 
     protected PageBean<T> pageBean;
 
@@ -57,11 +58,14 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
     protected String CACHE_NAME = getClass().getName();
 
+    private KProgressHUD hud;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_list);
         ButterKnife.bind(this);
+        hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
         initView();
     }
 
@@ -75,9 +79,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
-        setFooterType(TYPE_LOADING);
         mListView.addFooterView(mFooterView);
-
         initData();
 
     }
@@ -86,17 +88,20 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
     protected TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            dismisLoading();
             onRequestFinish();
+
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            pageBean =TextResponseFactory.getDefaultFactory().convertToPageBaen(responseString,getType());
-            if (pageBean!=null && pageBean.getItems().size() != 0  ) {
-                    setListData(pageBean);
+            pageBean = TextResponseFactory.getDefaultFactory().convertToPageBaen(responseString, getType());
+            if (pageBean != null && pageBean.getItems().size() != 0) {
+                setListData(pageBean);
             } else {
                 setFooterType(TYPE_NO_MORE);
             }
+            dismisLoading();
             onRequestFinish();
         }
     };
@@ -120,10 +125,12 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
 
     protected void initData() {
+        if (isFirstLoad) {
+            hud.show();
+        }
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
         onRefresh();
-
 
     }
 
@@ -159,6 +166,13 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
     protected void requestData() {
         requestDataStart();
         setFooterType(TYPE_LOADING);
+    }
+
+    private void dismisLoading(){
+        if(isFirstLoad){
+            isFirstLoad=false;
+            hud.dismiss();
+        }
     }
 
     protected void onRequestFinish() {

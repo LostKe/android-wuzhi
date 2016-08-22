@@ -67,7 +67,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
     }
 
     @Override
