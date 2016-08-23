@@ -4,19 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.adapter.DiaryAdpter;
 import zs.com.wuzhi.bean.Diary;
 import zs.com.wuzhi.bean.PersonDiary;
 import zs.com.wuzhi.util.Constant;
@@ -84,51 +83,7 @@ public class DiaryActivity extends BaseToolBarActivity {
         };
     }
 
-    class DiaryAdpter extends BaseAdapter {
-        ViewHolder viewHolder;
-        @Override
-        public int getCount() {
-            if(personDiary==null){
-                return 0;
-            }else{
-                List<Diary> diaryList=personDiary.getDiaryList();
-                return diaryList==null?0:diaryList.size();
-            }
 
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Diary diary=personDiary.getDiaryList().get(position);
-            if(convertView==null){
-                convertView=getLayoutInflater().inflate(R.layout.diary_item,null);
-                viewHolder=new ViewHolder();
-                viewHolder.tv_content= (TextView) convertView.findViewById(R.id.tv_diary_content);
-                viewHolder.tv_time= (TextView) convertView.findViewById(R.id.tv_diary_time);
-                convertView.setTag(viewHolder);
-            }else{
-                viewHolder= (ViewHolder) convertView.getTag();
-            }
-            viewHolder.tv_content.setText(diary.getContent());
-            viewHolder.tv_time.setText(diary.getTime());
-            return convertView;
-        }
-
-        final class ViewHolder {
-            public TextView tv_time;
-            public TextView tv_content;
-        }
-    }
 
     /**
      * 处理日记
@@ -147,7 +102,11 @@ public class DiaryActivity extends BaseToolBarActivity {
                 tv_star_count.setText(personDiary.getFlower());
             }
             //设置日记内容
-            DiaryAdpter diaryAdpter = new DiaryAdpter();
+            List<Diary> diaryList=new ArrayList<Diary>();
+            if(personDiary!=null && personDiary.getDiaryList()!=null){
+                diaryList=personDiary.getDiaryList();
+            }
+            DiaryAdpter diaryAdpter = new DiaryAdpter(diaryList,getApplication());
             lv_diary_content.setAdapter(diaryAdpter);
             hud.dismiss();
 

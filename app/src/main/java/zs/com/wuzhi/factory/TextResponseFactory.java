@@ -1,5 +1,7 @@
 package zs.com.wuzhi.factory;
 
+import android.content.Context;
+
 import zs.com.wuzhi.bean.PageBean;
 import zs.com.wuzhi.util.ResponseUtil;
 
@@ -16,11 +18,11 @@ public class TextResponseFactory {
         DAY_DIARY;
     }
 
-    public PageBean convertToPageBaen(String content,Type type){
+    public PageBean convertToPageBaen(String content, Type type, Context context){
         PageBean pageBean=null;
         switch (type){
             case DAY_DIARY:
-                pageBean= ResponseUtil.getUserDiary(content);
+                pageBean= ResponseUtil.getUserDiary(content,context);
                 break;
         }
         return pageBean;

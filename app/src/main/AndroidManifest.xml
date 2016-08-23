@@ -28,6 +28,7 @@
         <activity android:name=".activity.CommonSubmitActivity"></activity>
         <activity android:name=".activity.AddDiaryActivity"></activity>
         <activity android:name=".activity.MyDiaryActivity"></activity>
+        <activity android:name=".activity.MyDiaryDetailActivity"></activity>
     </application>
 
 </manifest>

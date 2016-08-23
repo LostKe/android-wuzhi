@@ -95,6 +95,13 @@ public class Constant {
     public static final String SETTING_BUNDLE="setting_bundle";
 
 
+    public static final String PAGE_START="page_start";
+    public static final String PAGE_END="page_end";
+    public static final String DIARY_ID="diary_id";
+    public static final String DIARY_CURRENT="diary_current";
+
+
+
 
 
 

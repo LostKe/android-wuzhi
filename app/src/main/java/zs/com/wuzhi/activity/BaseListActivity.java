@@ -80,6 +80,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
         mListView.addFooterView(mFooterView);
+        mListView.setOnItemClickListener(this);
         initData();
 
     }
@@ -95,7 +96,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            pageBean = TextResponseFactory.getDefaultFactory().convertToPageBaen(responseString, getType());
+            pageBean = TextResponseFactory.getDefaultFactory().convertToPageBaen(responseString, getType(),getContext());
             if (pageBean != null && pageBean.getItems().size() != 0) {
                 setListData(pageBean);
             } else {
@@ -145,6 +146,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
             @Override
             public void backHomeClick() {
                 finish();
+
             }
         };
     }

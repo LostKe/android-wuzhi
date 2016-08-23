@@ -15,6 +15,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="4" />
             <ImageView
+                android:id="@+id/iv_flower"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

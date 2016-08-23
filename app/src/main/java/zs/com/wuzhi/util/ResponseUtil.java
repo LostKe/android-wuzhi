@@ -1,5 +1,9 @@
 package zs.com.wuzhi.util;
 
+import android.content.Context;
+
+import com.alibaba.fastjson.JSON;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import zs.com.wuzhi.bean.DayDiary;
 import zs.com.wuzhi.bean.Diary;
+import zs.com.wuzhi.bean.DiarySummary;
 import zs.com.wuzhi.bean.PageBean;
 import zs.com.wuzhi.bean.UserInfo;
+import zs.com.wuzhi.db.DBHelper;
 
 /**
  * Created by zhangshuqing on 16/8/13.
@@ -82,7 +87,7 @@ public class ResponseUtil {
 
     }
 
-    public static UserInfo getUserInfo(String content) {
+    public static UserInfo getUserInfo(String content ) {
         UserInfo userInfo = new UserInfo();
         try {
             Document document = parseDocument(content);
@@ -106,11 +111,13 @@ public class ResponseUtil {
     /**
      * 分析[我的日记]分页查询的结果
      *
+     * 提取摘要，详细内容存入数据库
+     *
      * @param content
      */
-    public static PageBean getUserDiary(String content) {
-        PageBean<DayDiary> pageBean=new PageBean<DayDiary>();
-        List<DayDiary> result=new ArrayList<DayDiary>();
+    public static PageBean getUserDiary(String content, Context context) {
+        PageBean<DiarySummary> pageBean=new PageBean<DiarySummary>();
+        List<DiarySummary> result=new ArrayList<DiarySummary>();
         String nextPageUrl="";
         String lastPageUrl="";
         try {
@@ -124,8 +131,11 @@ public class ResponseUtil {
                     String href=page_index_elements.get(0).attr("href");
                     if(tag.contains(LAST_PAGE)){
                         lastPageUrl=href;
+                        nextPageUrl=Constant.PAGE_END;
                     }else if (tag.contains(NEXT_PAGE)){
                         nextPageUrl=href;
+                        lastPageUrl=Constant.PAGE_START;
+
                     }
                 }else if(page_index_size==2){
                     //当前页既不是第一页也不是最后一页
@@ -134,11 +144,14 @@ public class ResponseUtil {
                 }
             }
             Elements index_day_elements = document.select("div[class=index_day]");
+
+
             for (Element e : index_day_elements) {
-                DayDiary dayDiary=new DayDiary();
+
+                DiarySummary diarySummary=new DiarySummary();
                 //获取某一天的日期
                 String currentDay = e.child(0).html();
-                dayDiary.setCurrentDay(currentDay);
+                diarySummary.setCurrentDay(currentDay);
                 Element days = e.select("div[class=days]").get(0);
                 Elements diary_time_elements = days.children();
                 int len = diary_time_elements.size();
@@ -151,8 +164,14 @@ public class ResponseUtil {
                     diary.setContent(diary_content);
                     diaryList.add(diary);
                 }
-                dayDiary.setDiarys(diaryList);
-                result.add(dayDiary);
+                //dayDiary.setDiarys(diaryList);
+                diarySummary.setSummary(diaryList.get(0).getContent());
+                diarySummary.setTime(diaryList.get(0).getTime());
+                diarySummary.setNextPage(nextPageUrl);
+                //将日记数据存入数据库中  主键为 page+日期
+                DBHelper db=new DBHelper(context);
+                db.insertDiary(nextPageUrl+currentDay, JSON.toJSONString(diaryList));
+                result.add(diarySummary);
             }
         } catch (Exception e) {
             e.printStackTrace();
