@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tv_author"
         android:layout_below="@+id/head_ll"
+        android:lineSpacingExtra="4dp"
         android:listSelector="@android:color/transparent">
     </ListView>
 

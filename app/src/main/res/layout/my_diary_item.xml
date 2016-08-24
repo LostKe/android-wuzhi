@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@drawable/select_item_list">
     <TextView
         android:id="@+id/tv_my_diary_time"
@@ -13,14 +14,17 @@
 
     <!-- 显示摘要-->
     <TextView
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/tv_my_diary_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:lineSpacingExtra="4dp"
+        android:textSize="14sp"
         android:id="@+id/tv_my_diary_summary"
         android:lines="3"
         android:ellipsize="end"
         android:text="此刻"/>
     <include layout="@layout/linear_line"></include>
 
-</RelativeLayout>
+</LinearLayout>
