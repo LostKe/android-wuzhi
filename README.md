@@ -2,7 +2,7 @@
 * 吾志官网：https://wuzhi.me/last
 * 豆瓣小组：https://www.douban.com/group/314117/
 
-# 吾志Android APP 已实现的功能
+# APP已实现的功能
 
 * 此刻
 * 写新日记
