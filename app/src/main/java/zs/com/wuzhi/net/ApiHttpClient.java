@@ -58,25 +58,14 @@ public class ApiHttpClient {
 
 
     public static void refreshCookie(AppApplication appContext) {
-        client.addHeader(Constant.token_name, String.format(Constant.cookie_format, getCookie(appContext)));
+
+        client.addHeader(Constant.COOKIE, String.format(Constant.cookie_format, getCookie(appContext)));
     }
 
 
-    public static void setCookie(String cookie) {
-        client.addHeader("Cookie", cookie);
-    }
-
-    private static String appCookie;
-
-    public static void cleanCookie() {
-        appCookie = "";
-    }
 
     public static String getCookie(AppApplication appContext) {
-        if (appCookie == null || appCookie == "") {
-            appCookie = appContext.getProperty(Constant.SET_COOKIE);
-        }
-        return appCookie;
+        return appContext.getProperty(Constant.SET_COOKIE);
     }
 
 

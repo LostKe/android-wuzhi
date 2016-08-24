@@ -31,6 +31,7 @@ public class DBHelper  extends SQLiteOpenHelper {
         String sql="insert into diary (key,content) values(?,?)";
         Object[] args={key,text};
         db.execSQL(sql,args);
+        db.close();
     }
 
     public String  findContent(String key){
@@ -43,12 +44,14 @@ public class DBHelper  extends SQLiteOpenHelper {
 
 
         }
+        db.close();
         return content;
     }
 
     public void clearDiary(){
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete("diary", null, null);
+        db.close();
     }
 
 }

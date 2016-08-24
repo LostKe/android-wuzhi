@@ -87,6 +87,7 @@ public class MyDiaryActivity extends BaseListActivity {
         WuzhiApi.get(request_url,mHandler);
     }
 
+
     @Override
     public void onItemClick(AdapterView parent, View view, int position, long id) {
         DiarySummary summary= (DiarySummary) mAdapter.getItem(position);

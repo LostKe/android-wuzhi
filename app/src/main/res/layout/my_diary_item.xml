@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/select_item_list">
     <TextView
         android:id="@+id/tv_my_diary_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/diary_head"
         android:text="08月17日"/>
 
     <!-- 显示摘要-->
     <TextView
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tv_my_diary_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_my_diary_summary"
@@ -19,4 +23,4 @@
         android:text="此刻"/>
     <include layout="@layout/linear_line"></include>
 
-</LinearLayout>
+</RelativeLayout>

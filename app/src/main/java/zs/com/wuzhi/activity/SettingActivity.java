@@ -3,6 +3,7 @@ package zs.com.wuzhi.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -111,17 +112,16 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             String content=new String(responseBody);
             //首先获取主页信息
-            String  mineUrl= ResponseUtil.getMineUrl(content);
-
-            WuzhiApi.get(mineUrl, new AsyncHttpResponseHandler() {
+            UserInfo userInfo=ResponseUtil.getUserInfo(content);
+            tv_setting_nickname.setText(userInfo.getNickName());
+            tv_setting_signature.setText(userInfo.getSignature());
+            WuzhiApi.get(Constant.MAIN+userInfo.getMineUrl(), new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     String mineContent=new String(responseBody);
-                   UserInfo info= ResponseUtil.getUserInfo(mineContent);
-                    if (info != null) {
-                        tv_setting_nickname.setText(info.getNickName());
-                        tv_setting_signature.setText(info.getSignature());
-                        Glide.with(getApplicationContext()).load(info.getImgUrl()).into(iv_setting);
+                   String  imgUrl= ResponseUtil.getImgUrl(mineContent);
+                    if (!TextUtils.isEmpty(imgUrl)) {
+                        Glide.with(getApplicationContext()).load(imgUrl).into(iv_setting);
                     }
                     hud.dismiss();
                 }

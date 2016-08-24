@@ -7,7 +7,7 @@ public class Constant {
 
 
 
-    public static final String SET_COOKIE="Set-Cookie";
+    public static final String SET_COOKIE="set-cookie";
     public static final String USER_NAME="user_name";
     public static final String PASS_WORD="pass_word";
 

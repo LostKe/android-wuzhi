@@ -91,22 +91,37 @@ public class ResponseUtil {
         UserInfo userInfo = new UserInfo();
         try {
             Document document = parseDocument(content);
-            Elements elements = document.select("span[class=img_shadow]");
-            Element img_element = elements.get(0).child(0);
-            String img_url = img_element.attr("src");
-            String nickname = img_element.attr("alt");
-            userInfo.setImgUrl(img_url);
-            userInfo.setNickName(nickname);
-            Elements quote_element = document.select("span[class=quote_text]");
-            String signature = quote_element.get(0).html();
-            signature = signature.replaceAll("\"", "");
+            Elements elements_name = document.select("input[name=name]");
+            String user_name=elements_name.get(0).attr("value");
+            userInfo.setNickName(user_name);
+            Elements elements_signature= document.select("input[name=signature]");
+            String signature=elements_signature.get(0).attr("value");
             userInfo.setSignature(signature);
+            Elements elements_url = document.select("div[class=header]");
+            String url=elements_url.get(0).child(1).attr("href");
+            userInfo.setMineUrl(url);
+
         } catch (Exception e) {
             e.printStackTrace();
-            userInfo = null;
         }
         return userInfo;
     }
+
+
+    public static String getImgUrl(String content ) {
+        String img_url = "";
+        try {
+            Document document = parseDocument(content);
+            Elements elements = document.select("span[class=img_shadow]");
+            Element img_element = elements.get(0).child(0);
+            img_url = img_element.attr("src");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return img_url;
+    }
+
 
     /**
      * 分析[我的日记]分页查询的结果
