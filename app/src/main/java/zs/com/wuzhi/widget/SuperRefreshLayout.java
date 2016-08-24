@@ -83,12 +83,17 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
     private void getListView() {
         int child = getChildCount();
         if (child > 0) {
-            View childView = getChildAt(0);
-            if (childView instanceof ListView) {
-                mListView = (ListView) childView;
-                // 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
-                mListView.setOnScrollListener(this);
+
+            for (int i = 0;i<child;i++){
+                View childView = getChildAt(i);
+                if (childView instanceof ListView) {
+                    mListView = (ListView) childView;
+                    // 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
+                    mListView.setOnScrollListener(this);
+                    break;
+                }
             }
+
         }
     }
 

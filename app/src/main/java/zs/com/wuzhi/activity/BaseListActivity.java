@@ -91,7 +91,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             dismisLoading();
             onRequestFinish();
-
+            setFooterType(TYPE_ERROR);
         }
 
         @Override
