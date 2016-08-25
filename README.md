@@ -13,7 +13,7 @@
 * 修改隐私设置
 
 # 关于
-*开发该App 纯属兴趣爱好不算完善。如发现bug 请提issues,或者pull requests。谢谢！
+* 开发该App 纯属兴趣爱好。如发现bug 请提issues,或者pull requests。谢谢！
 
 # APP 数据来源和数据提交
 
