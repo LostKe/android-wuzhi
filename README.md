@@ -24,9 +24,10 @@
 ![](https://github.com/LostKe/android-wuzhi/raw/master/preview/c.jpg =250x480)
 ![](https://github.com/LostKe/android-wuzhi/raw/master/preview/d.jpg =250x480)
 
-<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/d.jpg" width="48">
-<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/d.jpg" width="48">
-<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/d.jpg" width="48">
+<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/a.jpg" width="250" height="480">
+<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/b.jpg" width="250" height="480">
+<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/c.jpg" width="250" height="480">
+<img src="https://github.com/LostKe/android-wuzhi/raw/master/preview/d.jpg" width="250" height="480">
 
 
 
