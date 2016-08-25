@@ -17,4 +17,12 @@
 * 所有数据都是通过HTTPClient 模拟Http请求，通过jsoup 解析获取的内容
 * 目前用到的[api](https://github.com/LostKe/android-wuzhi/blob/master/app/src/main/java/zs/com/wuzhi/util/Constant.java)
 
+# preview
+
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/1.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/2.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/3.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/4.jpg)
+
+
 
