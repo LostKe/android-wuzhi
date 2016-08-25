@@ -12,6 +12,9 @@
 * 修改昵称，签名
 * 修改隐私设置
 
+# 关于
+*开发该App 纯属兴趣爱好不算完善。如发现bug 请提issues,或者pull requests。谢谢！
+
 # APP 数据来源和数据提交
 
 * 所有数据都是通过HTTPClient 模拟Http请求，通过jsoup 解析获取的内容
