@@ -19,10 +19,10 @@
 
 # preview
 
-![](https://github.com/LostKe/android-wuzhi/blob/master/preview/1.jpg)
-![](https://github.com/LostKe/android-wuzhi/blob/master/preview/2.jpg)
-![](https://github.com/LostKe/android-wuzhi/blob/master/preview/3.jpg)
-![](https://github.com/LostKe/android-wuzhi/blob/master/preview/4.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/a.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/b.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/c.jpg)
+![](https://github.com/LostKe/android-wuzhi/blob/master/preview/d.jpg)
 
 
 
