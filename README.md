@@ -2,6 +2,8 @@
 * 吾志官网：https://wuzhi.me/last
 * 豆瓣小组：https://www.douban.com/group/314117/
 
+**APP下载链接**
+- [下载](https://github.com/LostKe/android-wuzhi/raw/master/app-release.apk)
 # APP已实现的功能
 
 * 此刻
