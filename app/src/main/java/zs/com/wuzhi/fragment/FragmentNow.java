@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import zs.com.wuzhi.R;
@@ -53,6 +54,7 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
         hud=KProgressHUD.create(getContext()).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setLabel("Please wait")
                 .setCancellable(true);
         hud.show();
+
         return view;
     }
 
@@ -72,8 +74,11 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
 
         gridView= (GridView) root.findViewById(R.id.gridView);
         gridView.setOnItemClickListener(this);
+
+        gridViewAdapter=new GridViewAdpter();
+        gridView.setAdapter(gridViewAdapter);
         //请求服务器获取文件 子线程进行
-        Handler handler=new MessageHandler();
+        Handler handler=new MessageHandler(this);
         new InitViewThread(handler).start();
 
     }
@@ -116,14 +121,9 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
     class GridViewAdpter extends BaseAdapter{
         ViewHolder holder;
 
-
-       public GridViewAdpter(){
-
-        }
-
         @Override
         public int getCount() {
-            return _items.size();
+            return _items==null?0:_items.size();
         }
 
         @Override
@@ -161,19 +161,32 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
     }
 
     /**
+     *Handler 定义为static类型原因
+     * 当Activity执行了onDestroy,由于线程以及Handler的HandleMessage的存在，使得系统本希望进行此Activity的内存回收不能实现
+     * (非静态的内部类中隐性的持有外部类的引用，导致可能存在内存泄露的问题)
+     * 将Handler 定义为静态内部类的形式，这样可以使与外部类解耦，不再持有外部内的引用
+     * 同时由于Handler中的handlerMessage一般都会多少需要访问或修改Activity的属性，此时，
+     * 需要在Handler内部定义指向此Activity的WeakReference，使其不会影响到Activity的内存回收同时，
+     * 可以在正常情况下访问到Activity的属性。
+     *
      * hadler 更新UI
      */
-    class MessageHandler extends  Handler{
+    static class MessageHandler extends  Handler{
+
+        private WeakReference<FragmentNow> current;
+        MessageHandler(FragmentNow mCurrent){
+            this.current=new WeakReference<FragmentNow>(mCurrent);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            _items= (List<Item>) msg.getData().getSerializable("items");
-            adapterItem(_items);
-            gridViewAdapter=new GridViewAdpter();
-            gridView.setAdapter(gridViewAdapter);
-            gridViewAdapter.notifyDataSetChanged();
-            hud.dismiss();
-            if(swipeRefreshLayout!=null){
-                swipeRefreshLayout.setRefreshing(false);
+            FragmentNow currentObj=current.get();
+            currentObj._items= (List<Item>) msg.getData().getSerializable("items");
+            currentObj.adapterItem(currentObj._items);
+            currentObj.gridViewAdapter.notifyDataSetChanged();
+            currentObj.hud.dismiss();
+            if(currentObj.swipeRefreshLayout!=null){
+                currentObj.swipeRefreshLayout.setRefreshing(false);
             }
 
         }
@@ -184,7 +197,7 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
      * 屏幕的每一行中不会有空白
      * @param items
      */
-    private void adapterItem(List<Item> items){
+    private  void adapterItem(List<Item> items){
         WindowManager windowManager= (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int width=windowManager.getDefaultDisplay().getWidth();//屏幕宽度
         int img_width= (int) getContext().getResources().getDimension(R.dimen.itemsize);
@@ -203,7 +216,7 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
      * 刷新触发操作
      */
     public void refresh(){
-        Handler handler=new MessageHandler();
+        Handler handler=new MessageHandler(this);
         new InitViewThread(handler).start();
 
     }
