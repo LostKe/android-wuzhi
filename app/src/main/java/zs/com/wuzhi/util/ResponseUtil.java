@@ -137,6 +137,7 @@ public class ResponseUtil {
         String lastPageUrl="";
         try {
             Document document = parseDocument(content);
+            document.outputSettings(new Document.OutputSettings().prettyPrint(false));
             Elements page_index_elements=document.select("a[class=page_item]");
             if(page_index_elements!=null){//存在分页的情况
                 int page_index_size=page_index_elements.size();

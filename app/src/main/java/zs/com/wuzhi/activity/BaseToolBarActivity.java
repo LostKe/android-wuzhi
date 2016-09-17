@@ -21,6 +21,17 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
 
     Toolbar toolbar;
 
+    enum ToolBarMenu{
+        MORE,DEFAULT
+    }
+
+    ToolBarMenu toolBarMenu=ToolBarMenu.DEFAULT;
+
+
+    public void setToolBarMenu(ToolBarMenu t){
+        this.toolBarMenu=t;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +40,30 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //默认 menu为完成按钮
         if (needCompleteButton()) {
             getMenuInflater().inflate(R.menu.base_toolbar_menu, menu);
         }
-
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(needCompleteButton()){
+            switch (toolBarMenu){
+                case MORE:
+                    menu.findItem(R.id.toolbar_complete).setVisible(false);
+                    menu.findItem(R.id.toolbar_more).setVisible(true);
+                    break;
+                default:
+                    menu.findItem(R.id.toolbar_complete).setVisible(true);
+                    menu.findItem(R.id.toolbar_more).setVisible(false);
+                    break;
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -60,6 +88,7 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
      * 设置toolbar的操作
      */
     protected void onCreateCustomToolBar() {
+
     }
 
 
@@ -67,8 +96,8 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
         void backHomeClick();
     }
 
-    public interface OnCompleteClickListener {
-        void onCompleteClick();
+    public interface OnMenuActionClickListener {
+        void onClick();
     }
 
     abstract boolean isBackHomeVisible();
@@ -89,7 +118,7 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
      *
      * @return
      */
-    OnCompleteClickListener getOnCompleteListener() {
+    OnMenuActionClickListener getOnMenuActionClickListener() {
         return null;
     }
 
@@ -107,7 +136,8 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
                 getOnBackHomeListener().backHomeClick();
                 break;
             case R.id.toolbar_complete:
-                getOnCompleteListener().onCompleteClick();
+            case R.id.toolbar_more:
+              getOnMenuActionClickListener().onClick();
                 break;
         }
         return super.onOptionsItemSelected(item);

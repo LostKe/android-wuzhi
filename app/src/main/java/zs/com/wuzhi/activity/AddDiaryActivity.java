@@ -61,10 +61,10 @@ public class AddDiaryActivity  extends BaseToolBarActivity{
     }
 
     @Override
-    OnCompleteClickListener getOnCompleteListener() {
-        return new OnCompleteClickListener() {
+    OnMenuActionClickListener getOnMenuActionClickListener() {
+        return new OnMenuActionClickListener() {
             @Override
-            public void onCompleteClick() {
+            public void onClick() {
                final String diaryContent=tv_add_diary_content.getText().toString();
                 if(TextUtils.isEmpty(diaryContent)){
                     Toast.makeText(getApplicationContext(),"什么都没有写哟",Toast.LENGTH_SHORT).show();

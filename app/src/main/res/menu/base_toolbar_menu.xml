@@ -6,4 +6,10 @@
         android:id="@+id/toolbar_complete"
         android:title="@string/complete"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/toolbar_more"
+        android:icon="@drawable/icon_pic_menu_lower"
+        android:title="更多"
+        app:showAsAction="ifRoom" />
 </menu>

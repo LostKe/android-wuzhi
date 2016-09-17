@@ -120,12 +120,10 @@ public class CommonSubmitActivity extends BaseToolBarActivity {
     }
 
     @Override
-    OnCompleteClickListener getOnCompleteListener() {
-
-        return new OnCompleteClickListener() {
-
+    OnMenuActionClickListener getOnMenuActionClickListener() {
+        return new OnMenuActionClickListener() {
             @Override
-            public void onCompleteClick() {
+            public void onClick() {
                 hud.show();
                 switch (type){
                     case SettingActivity.ACTION_NICKNAME:
@@ -140,6 +138,7 @@ public class CommonSubmitActivity extends BaseToolBarActivity {
             }
         };
     }
+
 
     AsyncHttpResponseHandler handler=new AsyncHttpResponseHandler() {
         @Override

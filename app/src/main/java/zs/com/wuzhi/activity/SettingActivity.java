@@ -55,6 +55,8 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
 
     KProgressHUD hud;
 
+    String selfImgUrl;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,9 +121,9 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     String mineContent=new String(responseBody);
-                   String  imgUrl= ResponseUtil.getImgUrl(mineContent);
-                    if (!TextUtils.isEmpty(imgUrl)) {
-                        Glide.with(getApplicationContext()).load(imgUrl).into(iv_setting);
+                    selfImgUrl= ResponseUtil.getImgUrl(mineContent);
+                    if (!TextUtils.isEmpty(selfImgUrl)) {
+                        Glide.with(getApplicationContext()).load(selfImgUrl).into(iv_setting);
                     }
                     hud.dismiss();
                 }
@@ -155,6 +157,10 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         switch (v.getId()){
             case R.id.ll_setting_pic:
                 //显示大头像，可以上传头像
+                bundle.putString(Constant.SELF_IMG_URL,selfImgUrl);
+                intent.setClass(this,SelfPhotoActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
                     break;
             case R.id.ll_setting_nickname:
                 //修改昵称

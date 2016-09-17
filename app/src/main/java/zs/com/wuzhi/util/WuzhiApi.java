@@ -3,6 +3,10 @@ package zs.com.wuzhi.util;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.net.ApiHttpClient;
 
 /**
@@ -89,6 +93,14 @@ public class WuzhiApi {
     public static void gettPrivacy( AsyncHttpResponseHandler handler) {
         ApiHttpClient.get(Constant.ACCOUNT_PRIVACY, handler);
     }
+
+
+    public static void updateAvatar(AppApplication context, File file, AsyncHttpResponseHandler handler) throws FileNotFoundException {
+        RequestParams params = new RequestParams();
+        params.put(Constant.AVATAR_NAME, file);
+        ApiHttpClient.uploadClient.post(Constant.AVATAR,params,handler);
+    }
+
 
 
     public static void get(String url,AsyncHttpResponseHandler handler){

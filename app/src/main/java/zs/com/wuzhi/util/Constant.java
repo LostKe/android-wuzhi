@@ -10,6 +10,7 @@ public class Constant {
     public static final String SET_COOKIE="set-cookie";
     public static final String USER_NAME="user_name";
     public static final String PASS_WORD="pass_word";
+    public static final String SELF_IMG_URL="self_img_url";
 
 
     public static final String COOKIE="cookie";
@@ -74,6 +75,9 @@ public class Constant {
     public static final String NOTE_CRSF_TOKEN = "csrf_token";
 
 
+
+    public static final String AVATAR = "https://wuzhi.me/account/avatar";
+    public static final String AVATAR_NAME = "file";
 
 
 

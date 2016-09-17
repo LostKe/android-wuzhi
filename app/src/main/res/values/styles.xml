@@ -18,6 +18,16 @@
         <item name="android:textColor">@color/linear_item_tv</item>
     </style>
 
+
+    <style name="dialog_item">
+       <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="button_common_blue">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">38dp</item>
@@ -52,6 +62,15 @@
     <style name="AppTheme.actionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="actionMenuTextColor">@color/white</item>
         <item name="android:textSize">@dimen/toolbarTextSize</item>
+    </style>
+
+
+    <style name="dialog_common" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+    </style>
+
+    <style name="dialog_bottom" parent="@style/dialog_common">
+        <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
     </style>
     
 </resources>

@@ -19,6 +19,10 @@ public class ApiHttpClient {
 
     public static AsyncHttpClient client;
 
+    public static AsyncHttpClient uploadClient;
+
+
+
     public ApiHttpClient() {
     }
 
@@ -26,13 +30,15 @@ public class ApiHttpClient {
         return client;
     }
 
-    public static void setHttpClient(AsyncHttpClient c, AppApplication appContext) {
+    public static void setHttpClient(AsyncHttpClient c,AsyncHttpClient cu, AppApplication appContext) {
         client = c;
+        uploadClient=cu;
         client.addHeader("Accept-Language", Locale.getDefault().toString());
         client.addHeader("Connection", "Keep-Alive");
         client.addHeader("content-type", "application/x-www-form-urlencoded");
         if (!TextUtils.isEmpty(getCookie(appContext))) {
             client.addHeader(Constant.COOKIE, String.format(Constant.cookie_format, getCookie(appContext)));
+            uploadClient.addHeader(Constant.COOKIE, String.format(Constant.cookie_format, getCookie(appContext)));
         }
 
     }
@@ -60,6 +66,8 @@ public class ApiHttpClient {
     public static void refreshCookie(AppApplication appContext) {
 
         client.addHeader(Constant.COOKIE, String.format(Constant.cookie_format, getCookie(appContext)));
+
+        uploadClient.addHeader(Constant.COOKIE, String.format(Constant.cookie_format, getCookie(appContext)));
     }
 
 

@@ -55,7 +55,12 @@ public class AppApplication extends Application {
         AsyncHttpClient client = new AsyncHttpClient(getSchemeRegistry());
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
         client.setCookieStore(myCookieStore);
-        ApiHttpClient.setHttpClient(client, this);
+
+        AsyncHttpClient upload_client = new AsyncHttpClient(getSchemeRegistry());
+        client.setCookieStore(myCookieStore);
+
+
+        ApiHttpClient.setHttpClient(client,upload_client, this);
 
         initLogin();
     }
