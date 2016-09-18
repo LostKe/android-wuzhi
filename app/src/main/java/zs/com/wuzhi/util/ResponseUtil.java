@@ -180,8 +180,6 @@ public class ResponseUtil {
                     diary.setContent(diary_content);
                     diaryList.add(diary);
                 }
-                //dayDiary.setDiarys(diaryList);
-                diarySummary.setSummary(diaryList.get(0).getContent());
                 diarySummary.setTime(diaryList.get(0).getTime());
                 diarySummary.setNextPage(nextPageUrl);
                 //将日记数据存入数据库中  主键为 page+日期

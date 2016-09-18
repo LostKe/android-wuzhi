@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -70,6 +71,7 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
         hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(false);
         setToolBarMenu(ToolBarMenu.MORE);
         init();
+
     }
 
     private void init() {
@@ -154,12 +156,6 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
     }
 
 
-    private void startImagePick() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent.createChooser(intent, "select img"), REQUEST_CODE_GETIMAGE_BYCROP);
-    }
 
 
     @Override
@@ -168,10 +164,10 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
             return;
         }
         switch (requestCode) {
-            case REQUEST_CODE_GETIMAGE_BYCROP://相册选图后裁剪
+            case REQUEST_CODE_GETIMAGE_BYCROP://相册选图
                 startActionCrop(data.getData());
                 break;
-            case REQUEST_CODE_GETIMAGE_BYCAMERA://相机照相后裁剪
+            case REQUEST_CODE_GETIMAGE_BYCAMERA://相机照相
                 startActionCrop(origUri);
                 break;
             case REQUEST_CODE_GETIMAGE_BYSDCARD://上传
@@ -199,7 +195,8 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
                 WuzhiApi.updateAvatar(AppApplication.context(),protraitFile, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Glide.with(getApplicationContext()).load(origUri).into(mTouchImageView);
+                        //更新当前图像
+                        mTouchImageView.setImageBitmap(BitmapFactory.decodeFile(protraitPath));
                         Toast.makeText(getApplicationContext(), "头像更新成功", Toast.LENGTH_SHORT).show();
                     }
 
@@ -224,6 +221,15 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
 
     }
 
+
+    private void startImagePick() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent.createChooser(intent, "select img"), REQUEST_CODE_GETIMAGE_BYCROP);
+    }
+
+
     //调用相机功能
     private void startCamerMakerPhoto() {
         if (!checkSdCardMounted()) {
@@ -234,8 +240,6 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
         String fileName = "wuzhi_" + timeStamp + ".jpg";// 照片命名
         File out = new File(FILE_SAVEPATH, fileName);
         origUri = Uri.fromFile(out);
-
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//camera应用
         intent.putExtra(MediaStore.EXTRA_OUTPUT, origUri);
         startActivityForResult(intent, REQUEST_CODE_GETIMAGE_BYCAMERA);
@@ -257,8 +261,6 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", width);// 裁剪框比例
         intent.putExtra("aspectY", height);
-
-
         intent.putExtra("outputX", width);// 输出图片大小
         intent.putExtra("outputY", height);
         intent.putExtra("scale", true);// 去黑边

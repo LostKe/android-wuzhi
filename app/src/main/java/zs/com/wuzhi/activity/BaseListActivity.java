@@ -89,7 +89,6 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
     protected TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            dismisLoading();
             onRequestFinish();
             setFooterType(TYPE_ERROR);
         }
@@ -102,8 +101,8 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
             } else {
                 setFooterType(TYPE_NO_MORE);
             }
-            dismisLoading();
             onRequestFinish();
+
         }
     };
 
@@ -179,11 +178,17 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
     protected void onRequestFinish() {
         onComplete();
+
     }
 
     protected void onComplete() {
         superRefreshLayout.onLoadComplete();
         mIsRefresh = false;
+        //避免 服务器一页 数据条目过少导致 填充不满整个屏幕导致 footView出现
+        if(mFooterView.getVisibility()==View.VISIBLE && isFirstLoad){
+            onLoadMore();
+        }
+        dismisLoading();
     }
 
 

@@ -11,20 +11,6 @@
         android:layout_gravity="center_vertical"
         android:background="@color/diary_head"
         android:text="08月17日"/>
-
-    <!-- 显示摘要-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="4dp"
-        android:lineSpacingExtra="4dp"
-        android:textSize="14sp"
-        android:id="@+id/tv_my_diary_summary"
-        android:lines="3"
-        android:ellipsize="end"
-        android:text="此刻"/>
     <include layout="@layout/linear_line"></include>
 
 </LinearLayout>

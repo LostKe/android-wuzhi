@@ -10,10 +10,8 @@ public class DiarySummary {
      * 当前日期
      */
     private String currentDay;
-    /**
-     * 摘要内容
-     */
-    private String summary;
+
+
     private String nextPage;
     /**
      * 摘要时间
@@ -28,13 +26,6 @@ public class DiarySummary {
         this.currentDay = currentDay;
     }
 
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
 
 
     public String getNextPage() {

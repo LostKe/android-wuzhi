@@ -59,9 +59,7 @@ public class MyDiaryActivity extends BaseListActivity {
         //下拉刷新清空数据
         if(mIsRefresh){
             mAdapter.clear();
-
             mAdapter.addItem(pageBean.getItems());
-
         }else{
             mAdapter.addItem(pageBean.getItems());
         }

@@ -15,9 +15,7 @@ public class DayDiaryAdpter extends BaseListAdapter<DiarySummary> {
     @Override
     protected void convert(ViewHolder vh, DiarySummary item, int position) {
         //设置日期
-        vh.setText(R.id.tv_my_diary_time,item.getCurrentDay()+" "+item.getTime());
-        //设置摘要（显示当天的第一条日记）
-        vh.setText(R.id.tv_my_diary_summary,item.getSummary());
+        vh.setText(R.id.tv_my_diary_time,item.getCurrentDay());
     }
 
     @Override
