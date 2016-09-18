@@ -154,6 +154,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
     public void onRefresh() {
         //刷新数据
         mIsRefresh = true;
+        isFirstLoad=true;
         requestData();
 
     }
@@ -184,7 +185,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
     protected void onComplete() {
         superRefreshLayout.onLoadComplete();
         mIsRefresh = false;
-        //避免 服务器一页 数据条目过少导致 填充不满整个屏幕导致 footView出现
+        //避免 请求服务器第一页数据 数据条目过少导致 填充不满整个屏幕导致 footView出现
         if(mFooterView.getVisibility()==View.VISIBLE && isFirstLoad){
             onLoadMore();
         }
