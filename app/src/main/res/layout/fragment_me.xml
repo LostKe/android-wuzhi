@@ -17,13 +17,11 @@
 
     <LinearLayout
         android:id="@+id/my_fllow"
-        style="@style/linnerlayout_item"
-        >
+        style="@style/linnerlayout_item">
         <TextView
             style="@style/linear_item_tv"
             android:text="我关注的人"/>
-        <ImageView
-            style="@style/arrow"/>
+        <ImageView style="@style/arrow"/>
     </LinearLayout>
     <include layout="@layout/linear_line"></include>
 

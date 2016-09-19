@@ -38,11 +38,11 @@
     <style name="arrow">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">16dp</item>
-        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">20dp</item>
+        <item name="android:paddingTop">20dp</item>
         <item name="android:paddingRight">12dp</item>
         <item name="android:paddingLeft">12dp</item>
-        <item name="android:src">@mipmap/ic_chevron_right_black_24dp</item>
+        <item name="android:src">@drawable/arrow</item>
     </style>
 
     <style name="diary_item">
