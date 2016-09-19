@@ -34,19 +34,36 @@
         android:id="@+id/lv_diary_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_author"
+        android:layout_above="@+id/ll_bottom"
         android:layout_below="@+id/head_ll"
         android:lineSpacingExtra="4dp"
         android:listSelector="@android:color/transparent">
     </ListView>
 
-    <TextView
-        android:id="@+id/tv_author"
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_bottom"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|right"
-        android:textColor="@color/diary_text_color"
-        />
+        android:background="@drawable/select_item_list"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/day_line_color" />
+        <TextView
+            android:id="@+id/tv_bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="＋ 关注"
+            android:textColor="@color/diary_head_text"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

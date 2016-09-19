@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,14 +37,16 @@ public class MyDiaryDetailActivity extends  BaseToolBarActivity{
     @BindView(R.id.tv_star_count)
     TextView tv_star_count;
 
-    @BindView(R.id.tv_author)
-    TextView tv_author;
+
 
     @BindView(R.id.lv_diary_content)
     ListView lv_diary_content;
 
     @BindView(R.id.iv_flower)
     ImageView iv_flower;
+
+    @BindView(R.id.ll_bottom)
+    LinearLayout ll_bottom;
 
     private KProgressHUD hud;
 
@@ -66,10 +69,8 @@ public class MyDiaryDetailActivity extends  BaseToolBarActivity{
     private void initView(final String key,String diary_current) {
         iv_flower.setVisibility(View.GONE);
         tv_star_count.setVisibility(View.GONE);
-        tv_author.setVisibility(View.GONE);
-
         tv_diary_date.setText(diary_current);
-
+        ll_bottom.setVisibility(View.INVISIBLE);
         service= Executors.newSingleThreadExecutor();
         final Handler handder=new DataHandler();
         service.execute(new Runnable() {
