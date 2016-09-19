@@ -96,6 +96,8 @@ public class MyDiaryActivity extends BaseListActivity {
         startActivity(intent);
     }
 
+
+
     @Override
     public Context getContext() {
         return this;

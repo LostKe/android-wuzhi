@@ -72,5 +72,13 @@
     <style name="dialog_bottom" parent="@style/dialog_common">
         <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
     </style>
+
+    <style name="linnerlayout_item">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/select_item_list</item>
+        <item name="android:clickable">true</item>
+    </style>
     
 </resources>
