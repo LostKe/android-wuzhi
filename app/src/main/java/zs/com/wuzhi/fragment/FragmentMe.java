@@ -3,7 +3,6 @@ package zs.com.wuzhi.fragment;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.activity.FollowActivity;
 import zs.com.wuzhi.activity.LoginActivity;
 import zs.com.wuzhi.activity.MyDiaryActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
@@ -36,9 +36,11 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     @BindView(R.id.my_diary_ll)
     LinearLayout mDiary;
 
-    @Nullable
+    @BindView(R.id.my_fllow)
+    LinearLayout mMyFollow;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me, null);
         ButterKnife.bind(this, view);
         init();
@@ -49,6 +51,7 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
         mPrimary.setOnClickListener(this);
         mSetting.setOnClickListener(this);
         mDiary.setOnClickListener(this);
+        mMyFollow.setOnClickListener(this);
     }
 
 
@@ -70,6 +73,9 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
                 break;
             case R.id.my_diary_ll:
                 checkLogin(intent, MyDiaryActivity.class);
+                break;
+            case R.id.my_fllow:
+                intent.setClass(getContext(), FollowActivity.class);
                 break;
 
         }

@@ -1,7 +1,6 @@
 package zs.com.wuzhi.activity;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -66,7 +65,7 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
     }
 
     @Override
-    public void setContentView(@LayoutRes int layoutResID) {
+    public void setContentView( int layoutResID) {
         mToolBarHelper = new ToolbarHelper(this, layoutResID);
         toolbar = mToolBarHelper.getToolBar();
         initToolBar(toolbar);
