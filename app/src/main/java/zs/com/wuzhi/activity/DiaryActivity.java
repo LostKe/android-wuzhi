@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import zs.com.wuzhi.bean.PersonDiary;
 import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.util.Constant;
 import zs.com.wuzhi.util.WuzhiSprider;
+import zs.com.wuzhi.widget.PromptDialog;
 
 /**
  * 用户日记
@@ -179,6 +181,8 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
                 case FOLLOW_INSERT:
                     ll_bottom.setVisibility(View.GONE);
                     hud.dismiss();
+                    PromptDialog dialog=new PromptDialog(DiaryActivity.this,R.drawable.card_icon_addtogroup_confirm,"关注成功");
+                    dialog.showDialog();
                     break;
             }
         }
