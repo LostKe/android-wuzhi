@@ -126,7 +126,7 @@ public abstract class BaseListActivity<T> extends BaseToolBarActivity implements
 
     protected void initData() {
         if (isFirstLoad) {
-            hud.show();
+            //hud.show();
         }
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);

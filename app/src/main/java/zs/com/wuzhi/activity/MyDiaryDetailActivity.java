@@ -69,7 +69,7 @@ public class MyDiaryDetailActivity extends  BaseToolBarActivity{
     private void initView(final String key,String diary_current) {
         iv_flower.setVisibility(View.GONE);
         tv_star_count.setVisibility(View.GONE);
-        tv_diary_date.setText(diary_current);
+        tv_diary_date.setText(diary_current.trim());
         ll_bottom.setVisibility(View.INVISIBLE);
         service= Executors.newSingleThreadExecutor();
         final Handler handder=new DataHandler();

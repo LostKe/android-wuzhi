@@ -84,6 +84,16 @@ public class WuzhiApi {
 
 
     /**
+     * 获取用户信息
+     * @param userId
+     * @param handler
+     */
+    public static void getUserInfo(String userId,AsyncHttpResponseHandler handler){
+        ApiHttpClient.get(String.format(Constant.USERINFO_URL,userId),handler);
+    }
+
+
+    /**
      * 获取个人信息
      *
      * Response 中附带了个人信息

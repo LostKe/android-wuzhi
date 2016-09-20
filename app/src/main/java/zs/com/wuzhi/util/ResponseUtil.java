@@ -24,8 +24,8 @@ import zs.com.wuzhi.db.DBHelper;
  */
 public class ResponseUtil {
 
-    private static final String  NEXT_PAGE="以前的";
-    private static final String  LAST_PAGE="最近的";
+    private static final String NEXT_PAGE = "以前的";
+    private static final String LAST_PAGE = "最近的";
 
     public static Document parseDocument(String html) {
         return Jsoup.parse(html);
@@ -87,18 +87,18 @@ public class ResponseUtil {
 
     }
 
-    public static UserInfo getUserInfo(String content ) {
+    public static UserInfo getUserInfo(String content) {
         UserInfo userInfo = new UserInfo();
         try {
             Document document = parseDocument(content);
             Elements elements_name = document.select("input[name=name]");
-            String user_name=elements_name.get(0).attr("value");
+            String user_name = elements_name.get(0).attr("value");
             userInfo.setNickName(user_name);
-            Elements elements_signature= document.select("input[name=signature]");
-            String signature=elements_signature.get(0).attr("value");
+            Elements elements_signature = document.select("input[name=signature]");
+            String signature = elements_signature.get(0).attr("value");
             userInfo.setSignature(signature);
             Elements elements_url = document.select("div[class=header]");
-            String url=elements_url.get(0).child(1).attr("href");
+            String url = elements_url.get(0).child(1).attr("href");
             userInfo.setMineUrl(url);
 
         } catch (Exception e) {
@@ -108,7 +108,25 @@ public class ResponseUtil {
     }
 
 
-    public static String getImgUrl(String content ) {
+    public static UserInfo findUserInfo(String content) {
+        UserInfo userInfo = new UserInfo();
+        try {
+            Document document = parseDocument(content);
+            String quote=document.select("span[class=quote_text]").get(0).html();
+            quote=quote.replaceAll("&quot;","");
+            userInfo.setSignature(quote);
+            Element element=document.select("span[class=img_shadow]").get(0).child(0);
+            String src=element.attr("src");
+            userInfo.setAvatarUrl(src);
+            String alt=element.attr("alt");
+            userInfo.setNickName(alt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userInfo;
+    }
+
+    public static String getImgUrl(String content) {
         String img_url = "";
         try {
             Document document = parseDocument(content);
@@ -125,38 +143,38 @@ public class ResponseUtil {
 
     /**
      * 分析[我的日记]分页查询的结果
-     *
+     * <p/>
      * 提取摘要，详细内容存入数据库
      *
      * @param content
      */
     public static PageBean getUserDiary(String content, Context context) {
-        PageBean<DiarySummary> pageBean=new PageBean<DiarySummary>();
-        List<DiarySummary> result=new ArrayList<DiarySummary>();
-        String nextPageUrl="";
-        String lastPageUrl="";
+        PageBean<DiarySummary> pageBean = new PageBean<DiarySummary>();
+        List<DiarySummary> result = new ArrayList<DiarySummary>();
+        String nextPageUrl = "";
+        String lastPageUrl = "";
         try {
             Document document = parseDocument(content);
             document.outputSettings(new Document.OutputSettings().prettyPrint(false));
-            Elements page_index_elements=document.select("a[class=page_item]");
-            if(page_index_elements!=null){//存在分页的情况
-                int page_index_size=page_index_elements.size();
-                if(page_index_size==1){
+            Elements page_index_elements = document.select("a[class=page_item]");
+            if (page_index_elements != null) {//存在分页的情况
+                int page_index_size = page_index_elements.size();
+                if (page_index_size == 1) {
                     //当前页要么是第一页，要么是最后一页
-                    String tag= page_index_elements.get(0).html();
-                    String href=page_index_elements.get(0).attr("href");
-                    if(tag.contains(LAST_PAGE)){
-                        lastPageUrl=href;
-                        nextPageUrl=Constant.PAGE_END;
-                    }else if (tag.contains(NEXT_PAGE)){
-                        nextPageUrl=href;
-                        lastPageUrl=Constant.PAGE_START;
+                    String tag = page_index_elements.get(0).html();
+                    String href = page_index_elements.get(0).attr("href");
+                    if (tag.contains(LAST_PAGE)) {
+                        lastPageUrl = href;
+                        nextPageUrl = Constant.PAGE_END;
+                    } else if (tag.contains(NEXT_PAGE)) {
+                        nextPageUrl = href;
+                        lastPageUrl = Constant.PAGE_START;
 
                     }
-                }else if(page_index_size==2){
+                } else if (page_index_size == 2) {
                     //当前页既不是第一页也不是最后一页
-                    nextPageUrl=page_index_elements.get(0).attr("href");
-                    lastPageUrl=page_index_elements.get(1).attr("href");
+                    nextPageUrl = page_index_elements.get(0).attr("href");
+                    lastPageUrl = page_index_elements.get(1).attr("href");
                 }
             }
             Elements index_day_elements = document.select("div[class=index_day]");
@@ -164,16 +182,16 @@ public class ResponseUtil {
 
             for (Element e : index_day_elements) {
 
-                DiarySummary diarySummary=new DiarySummary();
+                DiarySummary diarySummary = new DiarySummary();
                 //获取某一天的日期
                 String currentDay = e.child(0).html();
                 diarySummary.setCurrentDay(currentDay);
                 Element days = e.select("div[class=days]").get(0);
                 Elements diary_time_elements = days.children();
                 int len = diary_time_elements.size();
-                List<Diary> diaryList=new ArrayList<Diary>();
+                List<Diary> diaryList = new ArrayList<Diary>();
                 for (int i = 0; i < len; i = (i + 2)) {
-                    Diary diary=new Diary();
+                    Diary diary = new Diary();
                     String time = diary_time_elements.get(i).html();
                     String diary_content = diary_time_elements.get(i + 1).html();
                     diary.setTime(time);
@@ -183,8 +201,8 @@ public class ResponseUtil {
                 diarySummary.setTime(diaryList.get(0).getTime());
                 diarySummary.setNextPage(nextPageUrl);
                 //将日记数据存入数据库中  主键为 page+日期
-                DBHelper db=new DBHelper(context);
-                db.insertDiary(nextPageUrl+currentDay, JSON.toJSONString(diaryList));
+                DBHelper db = new DBHelper(context);
+                db.insertDiary(nextPageUrl + currentDay, JSON.toJSONString(diaryList));
                 result.add(diarySummary);
             }
         } catch (Exception e) {

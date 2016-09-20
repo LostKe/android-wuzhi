@@ -40,6 +40,12 @@ public class Constant {
      */
     public static final String MAIN = "https://wuzhi.me";
 
+
+    public static final String USERINFO_URL = "https://wuzhi.me/u/%s";
+
+
+
+
     /**
      * 设置 昵称和签名  POST 请求
      */

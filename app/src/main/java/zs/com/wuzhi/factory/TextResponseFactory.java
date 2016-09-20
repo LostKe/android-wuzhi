@@ -15,7 +15,7 @@ public class TextResponseFactory {
     }
 
     public enum Type {
-        DAY_DIARY;
+        DAY_DIARY,FOLLOW;
     }
 
     public PageBean convertToPageBaen(String content, Type type, Context context){
@@ -23,6 +23,8 @@ public class TextResponseFactory {
         switch (type){
             case DAY_DIARY:
                 pageBean= ResponseUtil.getUserDiary(content,context);
+                break;
+            case FOLLOW:
                 break;
         }
         return pageBean;

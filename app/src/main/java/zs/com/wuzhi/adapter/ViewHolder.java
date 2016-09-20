@@ -1,5 +1,6 @@
 package zs.com.wuzhi.adapter;
 
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 /**
  * Created by zhangshuqing on 16/8/21.
@@ -161,6 +164,12 @@ public class ViewHolder {
     public void setImage(int viewId, int imgRes) {
         ImageView iv = getView(viewId);
         iv.setImageResource(imgRes);
+    }
+
+    public void setCircleImage(Context context,int viewId, String url){
+        ImageView imageView = getView(viewId);
+        Glide.with(context).load(url).into(imageView);
+
     }
 
     public void setOnClick(int viewId, View.OnClickListener onClickListener) {

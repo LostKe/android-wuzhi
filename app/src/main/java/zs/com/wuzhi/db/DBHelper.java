@@ -5,10 +5,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhangshuqing on 16/8/23.
  */
 public class DBHelper  extends SQLiteOpenHelper {
+
+    public static int mPageSize=15;
+
+    public static void setPageSize(int pageSize){
+        mPageSize=pageSize;
+    }
 
     public DBHelper(Context context) {
         super(context, "wuzhi.db", null, 5);
@@ -22,7 +31,7 @@ public class DBHelper  extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql_follow="create table follow(_id integer primary key autoincrement, pid varchar(50))";
+        String sql_follow="create table if not exists  follow(_id integer primary key autoincrement, pid varchar(50))";
         db.execSQL(sql_follow);
     }
 
@@ -67,11 +76,50 @@ public class DBHelper  extends SQLiteOpenHelper {
         return b;
     }
 
+    /**
+     * 分页查询
+     * @param currentPage  请求第n页   n从0开始
+     * @return
+     */
+    public List<String> pageQuery4Follow(int currentPage){
+        List<String> result=new ArrayList<>();
+        int index=currentPage*mPageSize;
+        int end=(currentPage+1)*mPageSize;
+        String limit=index+","+end;
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cur=db.query("follow",new String[]{"pid"},null,null,null,null,null,limit);
+        if(cur!=null && cur.getColumnCount()>0){
+            while (cur.moveToNext()){
+                String content=cur.getString(cur.getColumnIndex("pid"));
+                result.add(content);
+            }
+        }
+        db.close();
+        return result;
+    }
+
+
+    public List<String> queryFollowAll(){
+        List<String> result=new ArrayList<>();
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cur=db.rawQuery("select * from follow order by _id desc", null);
+        if(cur!=null && cur.getColumnCount()>0){
+            while (cur.moveToNext()){
+                String content=cur.getString(cur.getColumnIndex("pid"));
+                result.add(content);
+            }
+
+        }
+        db.close();
+        return result;
+    }
+
     public void deleteFollowByPid(String pid){
         SQLiteDatabase db=this.getWritableDatabase();
         db.delete("follow","pid=?",new String[]{pid});
         db.close();
     }
+
 
     public void clearDiary(){
         SQLiteDatabase db=this.getWritableDatabase();
