@@ -25,16 +25,22 @@ public class DBHelper  extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql_diary="create table diary(_id integer primary key autoincrement, key varchar(50), content text)";
-        db.execSQL(sql_diary);
+        createTable(db);
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        createTable(db);
+    }
+
+    private void createTable(SQLiteDatabase db){
+        String sql_diary="create table if not exists diary(_id integer primary key autoincrement, key varchar(50), content text)";
+        db.execSQL(sql_diary);
         String sql_follow="create table if not exists  follow(_id integer primary key autoincrement, pid varchar(50))";
         db.execSQL(sql_follow);
     }
-
     public void insertDiary(String key,String text){
         SQLiteDatabase db=this.getWritableDatabase();
         String sql="insert into diary (key,content) values(?,?)";

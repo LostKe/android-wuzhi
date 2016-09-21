@@ -75,7 +75,7 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
                 checkLogin(intent, MyDiaryActivity.class);
                 break;
             case R.id.my_fllow:
-                intent.setClass(getContext(), FollowActivity.class);
+                checkLogin(intent, FollowActivity.class);
                 break;
 
         }
