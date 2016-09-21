@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import zs.com.wuzhi.Helper.GlideCircleTransform;
+
 /**
  * Created by zhangshuqing on 16/8/21.
  */
@@ -168,7 +170,7 @@ public class ViewHolder {
 
     public void setCircleImage(Context context,int viewId, String url){
         ImageView imageView = getView(viewId);
-        Glide.with(context).load(url).into(imageView);
+        Glide.with(context).load(url).transform(new GlideCircleTransform(context)).into(imageView);
 
     }
 
