@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:gravity="center"
-            android:text="谎。最荒芜的语言"
+            android:text="记录生活点滴"
             android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 

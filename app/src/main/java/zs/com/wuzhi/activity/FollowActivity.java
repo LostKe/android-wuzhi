@@ -6,9 +6,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.ListView;
 
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.kaopiz.kprogresshud.KProgressHUD;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,7 +37,7 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
     DBHelper dbHelper;
 
     ExecutorService service;
-
+    KProgressHUD hud;
 
 
     @BindView(R.id.follow_listView)
@@ -48,7 +51,7 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
         setContentView(R.layout.activity_follow);
         ButterKnife.bind(this);
         dbHelper=new DBHelper(this);
-        service= Executors.newSingleThreadExecutor();
+        service= Executors.newFixedThreadPool(3);
         initView();
         initData();
 
@@ -57,6 +60,8 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
 
 
     private void initView() {
+        hud= KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
+        hud.show();
     }
 
     private void initData() {
@@ -66,6 +71,7 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
         service.execute(new Runnable() {
             @Override
             public void run() {
+                hud.show();
                 Message message=Message.obtain();
                 message.what=QRY_DB;
                 List<String> userList=dbHelper.queryFollowAll();
@@ -105,6 +111,7 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
     }
 
     class FollowHandler extends Handler{
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
@@ -113,34 +120,58 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
                    final List<String> userList= (List<String>) msg.obj;
 
                     //网络中获取用户具体信息 添加到  adapter中
-                    service.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (String id:userList){
+                    final FollowAsyncHandler mHandler=new FollowAsyncHandler(FollowActivity.this,userList.size());
+
+                    for (final String id:userList){
+                        service.execute(new Runnable() {
+                            @Override
+                            public void run() {
                                 WuzhiApi.getUserInfo(id,mHandler);
                             }
-                        }
-                    });
+                        });
+                    }
+
                     break;
                 case QRY_NETWORK:
+
                     break;
 
             }
         }
     }
 
+    static class FollowAsyncHandler extends AsyncHttpResponseHandler{
+
+        CountDownLatch latch;
+        private WeakReference<FollowActivity> current;
 
 
-    protected TextHttpResponseHandler mHandler=new TextHttpResponseHandler() {
-        @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+        FollowAsyncHandler(FollowActivity current,int size){
+            latch=new CountDownLatch(size);
+            this.current=new WeakReference<FollowActivity>(current);
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            UserInfo userInfo= ResponseUtil.findUserInfo(responseString);
-            adapter.addItem(userInfo);
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            UserInfo userInfo= ResponseUtil.findUserInfo(new String(responseBody));
+            current.get().adapter.addItem(userInfo);
+            checkIsOver();
         }
-    };
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            checkIsOver();
+
+        }
+
+        private void checkIsOver(){
+            latch.countDown();
+            if(latch.getCount()==0){
+                current.get().hud.dismiss();
+            }
+        }
+    }
+
+
+
 }
