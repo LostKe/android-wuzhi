@@ -18,6 +18,7 @@
     <color name="day_line_color">#e7e7e7</color>
     <color name="day_windows_bg">#fafafa</color>
     <color name="dark">#FFE7E4E4</color>
+    <color name="dark_1">#605c5c</color>
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
 </resources>

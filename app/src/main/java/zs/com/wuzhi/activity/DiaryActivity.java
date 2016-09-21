@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,14 +60,15 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
     ExecutorService service;
     String userId;
 
+    String toolbarTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        toolbarTitle=intent.getExtras().getString(Constant.TOOL_BAR_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary);
         ButterKnife.bind(this);
-        Intent intent = getIntent();
         userId = intent.getExtras().getString(Constant.USER_ID);
-
         initFooter(userId);
         hud=KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE);
         hud.show();
@@ -78,7 +80,7 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
     private void initFooter(final String userId) {
         service= Executors.newSingleThreadExecutor();
         //查询数据库中关注人列表是否有 该条记录
-        final FooterUIHandler hanler=new FooterUIHandler();
+        final FooterUIHandler handler=new FooterUIHandler();
         service.execute(new Runnable() {
             @Override
             public void run() {
@@ -87,7 +89,7 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
                 Message message=Message.obtain();
                 message.what=FOLLOW_QRY;
                 message.obj=b;
-                hanler.sendMessage(message);
+                handler.sendMessage(message);
             }
         });
 
@@ -103,7 +105,7 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
 
     @Override
     String getToolBarTitle() {
-        return "此刻";
+        return TextUtils.isEmpty(toolbarTitle)?"此刻":toolbarTitle;
     }
 
     @Override

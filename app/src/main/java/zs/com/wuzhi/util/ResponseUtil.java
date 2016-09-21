@@ -118,6 +118,8 @@ public class ResponseUtil {
             Element element=document.select("span[class=img_shadow]").get(0).child(0);
             String src=element.attr("src");
             userInfo.setAvatarUrl(src);
+           String userId= ConvertUtil.convertUserId(src);
+            userInfo.setUserId(userId);
             String alt=element.attr("alt");
             userInfo.setNickName(alt);
         } catch (Exception e) {

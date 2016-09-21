@@ -7,10 +7,17 @@ import android.text.TextUtils;
  */
 public class ConvertUtil {
 
-    public static String getUserId(String imgurl){
+    public static String getUserId(String url){
+        int index=url.lastIndexOf("/")+1;
+        String longId=url.substring(index);
+        return longId;
+    }
+
+    public static String convertUserId(String imgurl){
         int index=imgurl.lastIndexOf("/")+1;
         String longId=imgurl.substring(index);
-        return longId;
+        String[] array=longId.split("\\.");
+        return array[0];
     }
 
 

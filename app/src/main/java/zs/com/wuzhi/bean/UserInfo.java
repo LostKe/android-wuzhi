@@ -4,6 +4,7 @@ package zs.com.wuzhi.bean;
  * Created by zhangshuqing on 16/8/14.
  */
 public class UserInfo {
+    private String userId;
     private String avatarUrl;
     private String mineUrl;
     private String nickName;
@@ -39,5 +40,13 @@ public class UserInfo {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

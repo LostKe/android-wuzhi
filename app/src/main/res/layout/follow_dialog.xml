@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/menu1"
+        android:text="确定不再关注此人？"
+        android:textColor="@color/dark_1"
+        style="@style/dialog_item"/>
+    <include layout="@layout/linear_line"></include>
+    <TextView
+        android:id="@+id/menu2"
+        android:text="确定"
+        style="@style/dialog_item" />
+    <include layout="@layout/linear_line"></include>
+    <TextView
+        android:id="@+id/menu3"
+        android:text="取消"
+       style="@style/dialog_item" />
+</LinearLayout>

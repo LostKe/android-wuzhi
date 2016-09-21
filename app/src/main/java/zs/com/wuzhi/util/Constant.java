@@ -111,7 +111,7 @@ public class Constant {
     public static final String DIARY_CURRENT="diary_current";
 
 
-
+    public static final String TOOL_BAR_TITLE="toolbarTitle";
 
 
 

@@ -18,17 +18,18 @@ import zs.com.wuzhi.R;
 public class MenuDialog extends Dialog implements View.OnClickListener {
 
 
+    int layoutId;
+
     private MenuDialog(Context context, boolean flag,
                        OnCancelListener listener) {
         super(context, flag, listener);
     }
 
 
-
-
     public MenuDialog(Context context) {
         this(context, R.style.dialog_bottom);
     }
+
 
     @SuppressLint("InflateParams")
     private MenuDialog(Context context, int defStyle) {
