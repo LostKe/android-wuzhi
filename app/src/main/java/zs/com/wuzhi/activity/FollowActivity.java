@@ -71,10 +71,12 @@ public class FollowActivity extends BaseToolBarActivity implements BaseListAdapt
         service.execute(new Runnable() {
             @Override
             public void run() {
-                hud.show();
                 Message message=Message.obtain();
                 message.what=QRY_DB;
                 List<String> userList=dbHelper.queryFollowAll();
+                if(userList.size()==0){
+                    hud.dismiss();
+                }
                 message.obj=userList;
                 mHandler.sendMessage(message);
             }
