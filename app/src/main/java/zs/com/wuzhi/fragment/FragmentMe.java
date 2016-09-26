@@ -27,8 +27,6 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
 
     Application app;
 
-    @BindView(R.id.my_primary)
-    LinearLayout mPrimary;
 
     @BindView(R.id.my_setting_ll)
     LinearLayout mSetting;
@@ -39,6 +37,9 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     @BindView(R.id.my_fllow)
     LinearLayout mMyFollow;
 
+    @BindView(R.id.my_security)
+    LinearLayout mMySercurity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me, null);
@@ -48,10 +49,10 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     }
 
     private void init() {
-        mPrimary.setOnClickListener(this);
         mSetting.setOnClickListener(this);
         mDiary.setOnClickListener(this);
         mMyFollow.setOnClickListener(this);
+        mMySercurity.setOnClickListener(this);
     }
 
 
@@ -65,9 +66,6 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
         //检查登录状态，未登录跳转到登录界面
         Intent intent = new Intent();
         switch (v.getId()) {
-            case R.id.my_primary:
-                checkLogin(intent, PrimaryActivity.class);
-                break;
             case R.id.my_setting_ll:
                 checkLogin(intent, SettingActivity.class);
                 break;
@@ -77,6 +75,12 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
             case R.id.my_fllow:
                 checkLogin(intent, FollowActivity.class);
                 break;
+            case R.id.my_security:
+                Bundle bundle=new Bundle();
+                bundle.putInt(Constant.ACTIVITY_INTENT_PRIMARY,Constant.ACTIVITY_INTENT_PRIMARY_GESTURE);
+                bundle.putString(Constant.TOOL_BAR_TITLE,"安全");
+                intent.putExtras(bundle);
+                checkLogin(intent, PrimaryActivity.class);
 
         }
         startActivity(intent);

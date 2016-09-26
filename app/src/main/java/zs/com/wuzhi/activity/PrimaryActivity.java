@@ -1,6 +1,11 @@
 package zs.com.wuzhi.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -10,43 +15,88 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.util.Constant;
+import zs.com.wuzhi.util.EncryptUtil;
 import zs.com.wuzhi.util.ResponseUtil;
 import zs.com.wuzhi.util.WuzhiApi;
 import zs.com.wuzhi.widget.SwitchView;
 
 /**
+ * 隐私/安全
  * Created by zhangshuqing on 16/7/24.
  */
-public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.OnStateChangedListener{
+public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.OnStateChangedListener, View.OnClickListener {
 
-    @BindView(R.id.primary_switch)
-    SwitchView switchView;
+    @BindView(R.id.ll_primary_diary)
+    LinearLayout ll_primary_diary;
+    @BindView(R.id.primary_diary_switch)
+    SwitchView primary_diary_switch;
+
+    @BindView(R.id.ll_primary_gesture_switch)
+    LinearLayout ll_primary_gesture_switch;
+    @BindView(R.id.primary_gesture_switch)
+    SwitchView primary_gesture_switch;
+
+    @BindView(R.id.ll_primary_getsture_edit)
+    LinearLayout ll_primary_getsture_edit;
 
     KProgressHUD hud;
+    AppApplication application;
+
+    String toolbarTitile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        application = AppApplication.context();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        toolbarTitile = bundle.getString(Constant.TOOL_BAR_TITLE);
         setContentView(R.layout.activity_primary);
         ButterKnife.bind(this);
-        hud=KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
-        init();
+        hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
+        init(bundle);
     }
 
-    private void init() {
-       switchView.setOnStateChangedListener(this);
-        initSwitch();
+    private void init(Bundle bundle) {
+        int action = bundle.getInt(Constant.ACTIVITY_INTENT_PRIMARY);
+        switch (action) {
+            case Constant.ACTIVITY_INTENT_PRIMARY_DIARY:
+                ll_primary_gesture_switch.setVisibility(View.GONE);
+                ll_primary_getsture_edit.setVisibility(View.GONE);
+                initSwitch();
+                break;
+            case Constant.ACTIVITY_INTENT_PRIMARY_GESTURE:
+                ll_primary_diary.setVisibility(View.GONE);
+                //检查是否设置了手势密码
+
+                String gesture_key = application.getProperty(Constant.GESTURE_KEY);
+                if (TextUtils.isEmpty(gesture_key)) {
+                    //设置为关闭状态
+                    primary_gesture_switch.setOpened(false);
+                    //修改手势功能隐藏
+                    ll_primary_getsture_edit.setVisibility(View.GONE);
+                }else{
+                    primary_gesture_switch.setOpened(true);
+                }
+                break;
+        }
+        primary_diary_switch.setOnStateChangedListener(this);
+        primary_gesture_switch.setOnStateChangedListener(this);
+        ll_primary_getsture_edit.setOnClickListener(this);
+
     }
 
-    private void initSwitch(){
+
+    private void initSwitch() {
         hud.show();
         WuzhiApi.gettPrivacy(new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String content=new String(responseBody);
-                int statu=ResponseUtil.getPrivacyStatu(content);
-                switchView.setOpened(statu==0?true:false);
+                String content = new String(responseBody);
+                int statu = ResponseUtil.getPrivacyStatu(content);
+                primary_diary_switch.setOpened(statu == 0 ? true : false);
                 hud.dismiss();
 
             }
@@ -54,7 +104,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 hud.dismiss();
-                Toast.makeText(getApplicationContext(),"获取信息失败，请稍后再试！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "获取信息失败，请稍后再试！", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -67,7 +117,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
 
     @Override
     String getToolBarTitle() {
-        return "隐私";
+        return TextUtils.isEmpty(toolbarTitile) ? "" : toolbarTitile;
     }
 
     @Override
@@ -82,18 +132,49 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     }
 
     @Override
-    public void toggleToOn() {
-        hud.show();
-        WuzhiApi.settingPrivacy(Constant.ACCOUNT_PRIVACY_TYPE_ALL,handler);
+    public void toggleToOn(View view) {
+
+        switch (view.getId()) {
+            case R.id.primary_diary_switch:
+                hud.show();
+                WuzhiApi.settingPrivacy(Constant.ACCOUNT_PRIVACY_TYPE_ALL, handler);
+                break;
+            case R.id.primary_gesture_switch:
+                hud.show();
+                //进入设置手势密码界面
+                Handler handler=new Handler();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.setClass(PrimaryActivity.this, GestureEditActivity.class);
+                        startActivityForResult(intent, Constant.REQUESET_CODE_EDIT_GESTURE);
+                        hud.dismiss();
+                    }
+                });
+
+                break;
+        }
+
+
     }
 
     @Override
-    public void toggleToOff() {
-        hud.show();
-        WuzhiApi.settingPrivacy(Constant.ACCOUNT_PRIVACY_TYPE_SELF,handler);
+    public void toggleToOff(View view) {
+
+        switch (view.getId()) {
+            case R.id.primary_diary_switch:
+                hud.show();
+                WuzhiApi.settingPrivacy(Constant.ACCOUNT_PRIVACY_TYPE_SELF, handler);
+                break;
+            case R.id.primary_gesture_switch:
+                gestureSwitch(false);
+                break;
+        }
+
     }
 
-    AsyncHttpResponseHandler handler=new AsyncHttpResponseHandler() {
+    AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             hud.dismiss();
@@ -102,7 +183,53 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             hud.dismiss();
-            Toast.makeText(getApplicationContext(),"设置失败，请稍后再试！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "设置失败，请稍后再试！", Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_primary_getsture_edit://点击修改手势密码
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+                String gestureKey = data.getStringExtra(Constant.GESTURE_KEY);
+                application.setProperty(Constant.GESTURE_KEY, EncryptUtil.encrypt(gestureKey));
+                gestureSwitch(true);
+                break;
+            case RESULT_CANCELED:
+                gestureSwitch(false);
+                break;
+        }
+    }
+
+
+    /**
+     * 手势锁开关操作
+     * @param b
+     */
+    private void gestureSwitch(boolean b){
+        if(b){
+            //打开
+            if(!primary_gesture_switch.isOpened()){
+                primary_gesture_switch.setOpened(true);
+            }
+            ll_primary_getsture_edit.setVisibility(View.VISIBLE);
+        }else{//关闭
+            if(primary_gesture_switch.isOpened()){
+                primary_gesture_switch.setOpened(false);
+            }
+            application.setProperty(Constant.GESTURE_KEY, "");
+            //修改手势功能隐藏
+            ll_primary_getsture_edit.setVisibility(View.GONE);
+        }
+    }
 }

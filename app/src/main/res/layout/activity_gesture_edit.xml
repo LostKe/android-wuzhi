@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--编辑手势界面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dot="http://schemas.android.com/apk/res/zs.com.wuzhi"
+    xmlns:gesture="http://schemas.android.com/apk/res/zs.com.wuzhi"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <zs.com.wuzhi.gestureLock.widget.DotViewGroup
+        android:id="@+id/dotView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        dot:count="3"
+        dot:dotSize="10"
+        dot:normal_color="#979999"
+        dot:action_color="#ff108ee9" />
+    <TextView
+        android:id="@+id/gesture_edit_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="绘制解锁图案"
+        android:textColor="#979999"/>
+
+    <zs.com.wuzhi.gestureLock.widget.GestureLockViewGroup
+        android:id="@+id/gesture_edit_lockView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        gesture:count="3"
+        gesture:tryTimes="5"
+        gesture:color_custom="#69b6fe"
+        gesture:color_move="#108ee9"
+        gesture:color_error="#f4333c"
+        gesture:line_custom_size="1"
+        gesture:line_move_size="1.5" />
+
+    <TextView
+        android:id="@+id/rest_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="重新设置手势密码"
+        android:visibility="invisible"
+        android:textColor="#108ee9"/>
+
+</LinearLayout>

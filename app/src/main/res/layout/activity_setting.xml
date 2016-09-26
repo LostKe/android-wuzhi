@@ -13,11 +13,7 @@
 
     <LinearLayout
         android:id="@+id/ll_setting_pic"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/select_item_list"
-        android:clickable="true">
+        style="@style/linnerlayout_item">
 
         <TextView
             style="@style/linear_item_tv"
@@ -35,11 +31,7 @@
 
     <LinearLayout
         android:id="@+id/ll_setting_nickname"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/select_item_list"
-        android:clickable="true">
+        style="@style/linnerlayout_item">
 
         <TextView
            style="@style/linear_item_tv"
@@ -62,11 +54,7 @@
 
     <LinearLayout
         android:id="@+id/ll_setting_sigin"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/select_item_list"
-        android:clickable="true">
+        style="@style/linnerlayout_item">
 
         <TextView
             style="@style/linear_item_tv"
@@ -84,6 +72,18 @@
             />
         <ImageView
             style="@style/arrow"/>
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+    <LinearLayout
+        android:id="@+id/ll_setting_primary"
+        style="@style/linnerlayout_item">
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="隐私"/>
+        <ImageView
+            style="@style/arrow"/>
+
     </LinearLayout>
     <include layout="@layout/linear_line"></include>
 

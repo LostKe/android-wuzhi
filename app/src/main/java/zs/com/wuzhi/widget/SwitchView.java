@@ -269,10 +269,10 @@ public class SwitchView extends View {
 
                     if (state == STATE_SWITCH_OFF2) {
                         toggleSwitch(STATE_SWITCH_ON);
-                        listener.toggleToOn();
+                        listener.toggleToOn(this);
                     } else if (state == STATE_SWITCH_ON2) {
                         toggleSwitch(STATE_SWITCH_OFF);
-                        listener.toggleToOff();
+                        listener.toggleToOff(this);
                     }
                     break;
             }
@@ -337,23 +337,13 @@ public class SwitchView extends View {
     }
 
     public interface OnStateChangedListener {
-        void toggleToOn();
+        void toggleToOn(View v);
 
-        void toggleToOff();
+        void toggleToOff(View v);
     }
 
-    private OnStateChangedListener listener = new OnStateChangedListener() {
-        @Override
-        public void toggleToOn() {
-            toggleSwitch(STATE_SWITCH_ON);
-        }
 
-        @Override
-        public void toggleToOff() {
-            toggleSwitch(STATE_SWITCH_OFF);
-        }
-    };
-
+    private OnStateChangedListener listener;
     public void setOnStateChangedListener(OnStateChangedListener listener) {
         if (listener == null) throw new IllegalArgumentException("empty listener");
         this.listener = listener;

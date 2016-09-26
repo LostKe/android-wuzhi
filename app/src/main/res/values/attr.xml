@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="color_custom" format="color" />
+    <attr name="color_move" format="color" />
+    <attr name="color_error" format="color" />
+    <attr name="line_custom_size" format="float" />
+    <attr name="line_move_size" format="float" />
+    <attr name="count" format="integer"/>
+    <attr name="tryTimes" format="integer" />
+
+
+    <attr name="dotSize" format="integer"></attr>
+    <attr name="normal_color" format="color"></attr>
+    <attr name="action_color" format="color"></attr>
+
+
+
+
+    <declare-styleable name="GestureLockViewGroup">
+        <attr name="color_custom" />
+        <attr name="color_move" />
+        <attr name="color_error" />
+        <attr name="line_custom_size"/>
+        <attr name="line_move_size"/>
+        <attr name="count"  />
+        <attr name="tryTimes" />
+    </declare-styleable>
+
+
+    <declare-styleable name="DotViewGroup">
+        <attr name="count"/>
+        <attr name="dotSize"/>
+        <attr name="normal_color"/>
+        <attr name="action_color"/>
+
+    </declare-styleable>
+
+</resources>

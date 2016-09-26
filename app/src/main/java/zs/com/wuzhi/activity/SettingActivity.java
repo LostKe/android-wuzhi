@@ -37,6 +37,9 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
     @BindView(R.id.ll_setting_logout)
     LinearLayout ll_setting_logout;
 
+    @BindView(R.id.ll_setting_primary)
+    LinearLayout ll_setting_primary;
+
     @BindView(R.id.iv_setting)
     ImageView iv_setting;
 
@@ -100,6 +103,7 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         ll_setting_nickname.setOnClickListener(this);
         ll_setting_sigin.setOnClickListener(this);
         ll_setting_pic.setOnClickListener(this);
+        ll_setting_primary.setOnClickListener(this);
         initUserInfo();
     }
 
@@ -189,6 +193,13 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
                 intent.setClass(this,MainActivity.class);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.ll_setting_primary:
+                intent.setClass(this,PrimaryActivity.class);
+                bundle.putInt(Constant.ACTIVITY_INTENT_PRIMARY,Constant.ACTIVITY_INTENT_PRIMARY_DIARY);
+                bundle.putString(Constant.TOOL_BAR_TITLE,"隐私");
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
 
         }

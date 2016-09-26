@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!--校验手势界面-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gesture="http://schemas.android.com/apk/res/zs.com.wuzhi"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:src="@drawable/user_logo"/>
+        <TextView
+            android:id="@+id/gesture_verify_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:textColor="#f4333c"
+            android:text="密码错误"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+
+   <zs.com.wuzhi.gestureLock.widget.GestureLockViewGroup
+       android:id="@+id/gesture_verify_lockView"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:gravity="center"
+       android:layout_weight="1"
+       gesture:count="3"
+       gesture:tryTimes="5"
+       gesture:color_custom="#69b6fe"
+       gesture:color_move="#108ee9"
+       gesture:color_error="#f4333c"
+       gesture:line_custom_size="1"
+       gesture:line_move_size="1.5" />
+
+    <TextView
+        android:id="@+id/gesture_verify_forgot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textColor="#108ee9"
+        android:text="忘记手势密码?"/>
+</LinearLayout>

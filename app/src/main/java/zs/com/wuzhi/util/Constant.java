@@ -115,5 +115,25 @@ public class Constant {
 
 
 
+    public static final String ACTIVITY_INTENT_PRIMARY="ACTIVITY_INTENT_PRIMARY";
+
+    public static final int ACTIVITY_INTENT_PRIMARY_DIARY=1;
+    public static final int ACTIVITY_INTENT_PRIMARY_GESTURE=2;
+
+
+
+    public static final String GESTURE_KEY="GESTURE_KEY";
+
+
+    public static final int REQUESET_CODE_EDIT_GESTURE=888;
+
+
+
+
+
+
+
+
+
 
 }
