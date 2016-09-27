@@ -20,7 +20,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     }
 
     public DBHelper(Context context) {
-        super(context, "wuzhi.db", null, 5);
+        super(context, "wuzhi.db", null, 6);
     }
 
     @Override
@@ -40,6 +40,8 @@ public class DBHelper  extends SQLiteOpenHelper {
         db.execSQL(sql_diary);
         String sql_follow="create table if not exists  follow(_id integer primary key autoincrement, pid varchar(50))";
         db.execSQL(sql_follow);
+        String sql_gesture="create table if not exists gesture (_id integer primary key autoincrement, gesture_key varchar(50))";
+        db.execSQL(sql_gesture);
     }
     public void insertDiary(String key,String text){
         SQLiteDatabase db=this.getWritableDatabase();
@@ -57,6 +59,15 @@ public class DBHelper  extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void insertGesture(String gesture_key){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.delete("gesture",null,null);
+        String sql="insert into gesture (gesture_key) values(?)";
+        Object[] args={gesture_key};
+        db.execSQL(sql,args);
+        db.close();
+    }
+
     public String  findContent(String key){
         String content="";
         SQLiteDatabase db=this.getWritableDatabase();
@@ -70,6 +81,19 @@ public class DBHelper  extends SQLiteOpenHelper {
         db.close();
         return content;
     }
+
+    public String  findGestureKey(){
+        String gesture_key="";
+        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cur=db.rawQuery("select * from gesture",null);
+        if(cur!=null && cur.getCount()>0){
+            cur.moveToNext();
+            gesture_key=cur.getString(cur.getColumnIndex("gesture_key"));
+        }
+        db.close();
+        return gesture_key;
+    }
+
 
     public boolean isExistFollow(String pid){
         boolean b=false;

@@ -4,12 +4,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import cz.msebera.android.httpclient.Header;
+import zs.com.wuzhi.Helper.GlideCircleTransform;
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.gestureLock.widget.GestureLockViewGroup;
+import zs.com.wuzhi.util.Constant;
+import zs.com.wuzhi.util.ConvertUtil;
+import zs.com.wuzhi.util.ResponseUtil;
+import zs.com.wuzhi.util.WuzhiApi;
+import zs.com.wuzhi.widget.PromptDialog;
 
 
 /**
@@ -21,19 +34,39 @@ public class GestureVerifyActivity extends BaseToolBarActivity {
 
     TextView gesture_verify_tip;
 
+    ImageView userLogo;
+
+    String gestureKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gestureKey=getIntent().getExtras().getString(Constant.GESTURE_KEY);
         setContentView(R.layout.activity_gesture_verify);
         initView();
-
-
     }
+
 
 
     private void initView() {
         gestureLockViewGroup= (GestureLockViewGroup) findViewById(R.id.gesture_verify_lockView);
+        gestureLockViewGroup.setAnswer(ConvertUtil.stringToArray(gestureKey));
+
         gesture_verify_tip= (TextView) findViewById(R.id.gesture_verify_tip);
+        userLogo= (ImageView) findViewById(R.id.user_logo);
+        WuzhiApi.getAvatar(new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String content=new String(responseBody);
+                String imgUrl= ResponseUtil.getAvatar(content);
+                Glide.with(GestureVerifyActivity.this).load(imgUrl).transform(new GlideCircleTransform(GestureVerifyActivity.this)).into(userLogo);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
         gestureLockViewGroup.setOnGestureLockViewListener(new GestureLockViewGroup.OnGestureLockViewListener() {
             @Override
             public void onBlockSelected(int cId) {
@@ -49,6 +82,16 @@ public class GestureVerifyActivity extends BaseToolBarActivity {
                     gesture_verify_tip.startAnimation(anim);
                 }else {
                     gesture_verify_tip.setVisibility(View.INVISIBLE);
+                    PromptDialog dialog=new PromptDialog(GestureVerifyActivity.this,R.drawable.card_icon_addtogroup_confirm,"校验成功");
+                    dialog.showDialog();
+                    final Timer timer=new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    },1001);
                 }
             }
 
@@ -67,17 +110,23 @@ public class GestureVerifyActivity extends BaseToolBarActivity {
 
     @Override
     boolean isBackHomeVisible() {
-        return false;
+        return true;
     }
 
     @Override
     String getToolBarTitle() {
-        return "解锁";
+        return "校验手势";
     }
 
     @Override
     OnBackHomeClicklistener getOnBackHomeListener() {
-        return null;
+        return new OnBackHomeClicklistener() {
+            @Override
+            public void backHomeClick() {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        };
     }
 
 

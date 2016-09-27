@@ -84,6 +84,14 @@ public class WuzhiApi {
 
 
     /**
+     * 获取头像信息
+     * @param handler
+     */
+    public static void getAvatar(AsyncHttpResponseHandler handler){
+        ApiHttpClient.get(Constant.ACCOUNT_AVATAR, handler);
+    }
+
+    /**
      * 获取用户信息
      * @param userId
      * @param handler

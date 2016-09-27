@@ -43,13 +43,14 @@ public class Constant {
 
     public static final String USERINFO_URL = "https://wuzhi.me/u/%s";
 
-
+    public static final String ACCOUNT_AVATAR = "https://wuzhi.me/account/avatar";
 
 
     /**
      * 设置 昵称和签名  POST 请求
      */
     public static final String ACCOUNT_PROFILE = "https://wuzhi.me/account/profile";
+
     public static final String ACCOUNT_PROFILE_NAME = "name";
     public static final String ACCOUNT_PROFILE_SIGNATURE = "signature";
 
@@ -126,6 +127,7 @@ public class Constant {
 
 
     public static final int REQUESET_CODE_EDIT_GESTURE=888;
+    public static final int REQUESET_CODE_VERIFY_GESTURE=999;
 
 
 

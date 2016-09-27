@@ -60,8 +60,7 @@ public class GestureEditActivity extends BaseToolBarActivity implements View.OnC
         return new OnBackHomeClicklistener() {
             @Override
             public void backHomeClick() {
-                Intent intent=new Intent();
-                setResult(RESULT_CANCELED, intent);
+                setResult(RESULT_CANCELED);
                 finish();
             }
         };

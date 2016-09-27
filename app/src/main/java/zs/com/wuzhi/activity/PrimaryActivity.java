@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import zs.com.wuzhi.R;
-import zs.com.wuzhi.application.AppApplication;
+import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.util.Constant;
 import zs.com.wuzhi.util.EncryptUtil;
 import zs.com.wuzhi.util.ResponseUtil;
@@ -42,17 +42,18 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     LinearLayout ll_primary_getsture_edit;
 
     KProgressHUD hud;
-    AppApplication application;
-
+    DBHelper dbHelper;
     String toolbarTitile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        application = AppApplication.context();
+        dbHelper=new DBHelper(this);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        toolbarTitile = bundle.getString(Constant.TOOL_BAR_TITLE);
+        if(bundle!=null){
+            toolbarTitile = bundle.getString(Constant.TOOL_BAR_TITLE);
+        }
         setContentView(R.layout.activity_primary);
         ButterKnife.bind(this);
         hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
@@ -69,17 +70,21 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
                 break;
             case Constant.ACTIVITY_INTENT_PRIMARY_GESTURE:
                 ll_primary_diary.setVisibility(View.GONE);
-                //检查是否设置了手势密码
+                Handler handler=new Handler();
+                hud.show();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String gestureKey=dbHelper.findGestureKey();
 
-                String gesture_key = application.getProperty(Constant.GESTURE_KEY);
-                if (TextUtils.isEmpty(gesture_key)) {
-                    //设置为关闭状态
-                    primary_gesture_switch.setOpened(false);
-                    //修改手势功能隐藏
-                    ll_primary_getsture_edit.setVisibility(View.GONE);
-                }else{
-                    primary_gesture_switch.setOpened(true);
-                }
+                        if(TextUtils.isEmpty(gestureKey)){
+                            gestureSwitch(false);
+                        }else{
+                            gestureSwitch(true);
+                        }
+                        hud.dismiss();
+                    }
+                });
                 break;
         }
         primary_diary_switch.setOnStateChangedListener(this);
@@ -117,7 +122,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
 
     @Override
     String getToolBarTitle() {
-        return TextUtils.isEmpty(toolbarTitile) ? "" : toolbarTitile;
+        return TextUtils.isEmpty(toolbarTitile) ? "设置" : toolbarTitile;
     }
 
     @Override
@@ -168,7 +173,21 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
                 WuzhiApi.settingPrivacy(Constant.ACCOUNT_PRIVACY_TYPE_SELF, handler);
                 break;
             case R.id.primary_gesture_switch:
-                gestureSwitch(false);
+                //关闭手势校验 需要校验密码
+                hud.show();
+                Handler handler=new Handler();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.setClass(PrimaryActivity.this, GestureVerifyActivity.class);
+                        //传入手势密码
+                        String gestureKey=dbHelper.findGestureKey();
+                        intent.putExtra(Constant.GESTURE_KEY, EncryptUtil.decrypt(gestureKey));
+                        startActivityForResult(intent, Constant.REQUESET_CODE_VERIFY_GESTURE);
+                        hud.dismiss();
+                    }
+                });
                 break;
         }
 
@@ -199,16 +218,35 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-                String gestureKey = data.getStringExtra(Constant.GESTURE_KEY);
-                application.setProperty(Constant.GESTURE_KEY, EncryptUtil.encrypt(gestureKey));
-                gestureSwitch(true);
+
+
+        switch (requestCode){
+            case Constant.REQUESET_CODE_EDIT_GESTURE:
+                switch (resultCode) {
+                    case RESULT_OK:
+                        String gestureKey = data.getStringExtra(Constant.GESTURE_KEY);
+                        dbHelper.insertGesture(EncryptUtil.encrypt(gestureKey));
+                        gestureSwitch(true);
+                        break;
+                    case RESULT_CANCELED:
+                        gestureSwitch(false);
+                        break;
+                }
                 break;
-            case RESULT_CANCELED:
-                gestureSwitch(false);
+            case Constant.REQUESET_CODE_VERIFY_GESTURE:
+                switch (resultCode){
+                    case RESULT_OK:
+                        gestureSwitch(false);
+                        break;
+                    case RESULT_CANCELED:
+                        gestureSwitch(true);
+                        break;
+                }
                 break;
         }
+
+
+
     }
 
 
@@ -227,9 +265,9 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
             if(primary_gesture_switch.isOpened()){
                 primary_gesture_switch.setOpened(false);
             }
-            application.setProperty(Constant.GESTURE_KEY, "");
             //修改手势功能隐藏
             ll_primary_getsture_edit.setVisibility(View.GONE);
+            dbHelper.insertGesture("");
         }
     }
 }

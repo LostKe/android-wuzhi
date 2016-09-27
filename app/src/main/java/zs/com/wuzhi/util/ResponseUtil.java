@@ -142,6 +142,23 @@ public class ResponseUtil {
         return img_url;
     }
 
+    public static String getAvatar(String content) {
+        String img_url = "";
+        try {
+            Document document = parseDocument(content);
+            Elements elements = document.select("div[class=img_shadow]");
+            Element img_element = elements.get(0).child(0);
+            img_url = img_element.attr("src");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return img_url;
+    }
+
+
+
+
 
     /**
      * 分析[我的日记]分页查询的结果

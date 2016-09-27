@@ -62,7 +62,7 @@ public class ConvertUtil {
 
     public static int[] stringToArray(String s){
         String[] arry=s.split(",");
-        int[] result={};
+        int[] result=new int[arry.length];
         for (int i=0;i<arry.length;i++){
             result[i]=Integer.valueOf(arry[i]);
         }
