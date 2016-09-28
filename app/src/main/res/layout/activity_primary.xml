@@ -35,6 +35,7 @@
         android:id="@+id/ll_primary_gesture_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/select_item_list"
         android:orientation="vertical">
         <LinearLayout
 
