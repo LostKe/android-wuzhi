@@ -4,9 +4,11 @@
     xmlns:dot="http://schemas.android.com/apk/res/zs.com.wuzhi"
     xmlns:gesture="http://schemas.android.com/apk/res/zs.com.wuzhi"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="ResAuto">
 
     <zs.com.wuzhi.gestureLock.widget.DotViewGroup
         android:id="@+id/dotView"
