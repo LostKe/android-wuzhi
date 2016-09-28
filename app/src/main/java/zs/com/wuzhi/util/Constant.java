@@ -125,7 +125,7 @@ public class Constant {
 
     public static final String GESTURE_KEY="GESTURE_KEY";
 
-
+    public static final int REQUESET_CODE_UPDATE_GESTURE=777;
     public static final int REQUESET_CODE_EDIT_GESTURE=888;
     public static final int REQUESET_CODE_VERIFY_GESTURE=999;
 

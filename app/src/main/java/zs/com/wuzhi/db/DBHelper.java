@@ -68,6 +68,12 @@ public class DBHelper  extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void clearGesture(){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.delete("gesture",null,null);
+        db.close();
+    }
+
     public String  findContent(String key){
         String content="";
         SQLiteDatabase db=this.getWritableDatabase();

@@ -1,5 +1,6 @@
 package zs.com.wuzhi.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,6 +18,7 @@ import java.util.TimerTask;
 import cz.msebera.android.httpclient.Header;
 import zs.com.wuzhi.Helper.GlideCircleTransform;
 import zs.com.wuzhi.R;
+import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.gestureLock.widget.GestureLockViewGroup;
 import zs.com.wuzhi.util.Constant;
 import zs.com.wuzhi.util.ConvertUtil;
@@ -28,13 +30,15 @@ import zs.com.wuzhi.widget.PromptDialog;
 /**
  * Created by zhangshuqing on 16/9/24.
  */
-public class GestureVerifyActivity extends BaseToolBarActivity {
+public class GestureVerifyActivity extends BaseToolBarActivity implements View.OnClickListener{
 
     GestureLockViewGroup gestureLockViewGroup;
 
     TextView gesture_verify_tip;
 
     ImageView userLogo;
+
+    TextView gesture_verify_forgot;
 
     String gestureKey;
 
@@ -53,6 +57,8 @@ public class GestureVerifyActivity extends BaseToolBarActivity {
         gestureLockViewGroup.setAnswer(ConvertUtil.stringToArray(gestureKey));
 
         gesture_verify_tip= (TextView) findViewById(R.id.gesture_verify_tip);
+        gesture_verify_forgot= (TextView) findViewById(R.id.gesture_verify_forgot);
+        gesture_verify_forgot.setOnClickListener(this);
         userLogo= (ImageView) findViewById(R.id.user_logo);
         WuzhiApi.getAvatar(new AsyncHttpResponseHandler() {
             @Override
@@ -129,6 +135,17 @@ public class GestureVerifyActivity extends BaseToolBarActivity {
         };
     }
 
-
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.gesture_verify_forgot:
+                DBHelper dbHelper=new DBHelper(this);
+                dbHelper.clearGesture();//将手势密码设置为空
+                //跳转到登录界面
+                Intent intent=new Intent();
+                intent.setClass(this,LoginActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

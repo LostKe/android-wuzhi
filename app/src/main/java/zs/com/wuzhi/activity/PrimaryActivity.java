@@ -57,6 +57,9 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
         setContentView(R.layout.activity_primary);
         ButterKnife.bind(this);
         hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
+        primary_diary_switch.setOnStateChangedListener(this);
+        primary_gesture_switch.setOnStateChangedListener(this);
+        ll_primary_getsture_edit.setOnClickListener(this);
         init(bundle);
     }
 
@@ -87,9 +90,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
                 });
                 break;
         }
-        primary_diary_switch.setOnStateChangedListener(this);
-        primary_gesture_switch.setOnStateChangedListener(this);
-        ll_primary_getsture_edit.setOnClickListener(this);
+
 
     }
 
@@ -147,8 +148,8 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
             case R.id.primary_gesture_switch:
                 hud.show();
                 //进入设置手势密码界面
-                Handler handler=new Handler();
-                handler.post(new Runnable() {
+                Handler post_handler=new Handler();
+                post_handler.post(new Runnable() {
                     @Override
                     public void run() {
                         Intent intent = new Intent();
@@ -157,8 +158,8 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
                         hud.dismiss();
                     }
                 });
-
                 break;
+
         }
 
 
@@ -210,6 +211,23 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_primary_getsture_edit://点击修改手势密码
+                //编辑手势密码
+                //1.首先校验手势密码
+                //关闭手势校验 需要校验密码
+                hud.show();
+                Handler handler=new Handler();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent();
+                        intent.setClass(PrimaryActivity.this, GestureVerifyActivity.class);
+                        //传入手势密码
+                        String gestureKey=dbHelper.findGestureKey();
+                        intent.putExtra(Constant.GESTURE_KEY, EncryptUtil.decrypt(gestureKey));
+                        startActivityForResult(intent, Constant.REQUESET_CODE_UPDATE_GESTURE);
+                        hud.dismiss();
+                    }
+                });
                 break;
         }
     }
@@ -218,8 +236,6 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         switch (requestCode){
             case Constant.REQUESET_CODE_EDIT_GESTURE:
                 switch (resultCode) {
@@ -243,9 +259,28 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
                         break;
                 }
                 break;
+            case Constant.REQUESET_CODE_UPDATE_GESTURE:
+                switch (resultCode){
+                    case RESULT_OK:
+                        hud.show();
+                        //进入设置手势密码界面
+                        Handler post_handler=new Handler();
+                        post_handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent();
+                                intent.setClass(PrimaryActivity.this, GestureEditActivity.class);
+                                startActivityForResult(intent, Constant.REQUESET_CODE_EDIT_GESTURE);
+                                hud.dismiss();
+                            }
+                        });
+                        break;
+                    case RESULT_CANCELED:
+
+                        break;
+                }
+                break;
         }
-
-
 
     }
 
@@ -267,7 +302,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
             }
             //修改手势功能隐藏
             ll_primary_getsture_edit.setVisibility(View.GONE);
-            dbHelper.insertGesture("");
+            dbHelper.clearGesture();
         }
     }
 }

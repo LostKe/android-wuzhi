@@ -8,9 +8,9 @@
         android:id="@+id/ll_primary_diary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+       >
         <LinearLayout
-
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,17 +59,13 @@
 
     </LinearLayout>
 
-
-
-
-
     <LinearLayout
-        android:id="@+id/ll_primary_getsture_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clickable="true">
         <LinearLayout
-
+            android:id="@+id/ll_primary_getsture_edit"
             style="@style/linnerlayout_item">
             <TextView
                 style="@style/linear_item_tv"
@@ -78,10 +74,6 @@
                 style="@style/arrow"/>
         </LinearLayout>
         <include layout="@layout/linear_line"></include>
-
     </LinearLayout>
-
-
-
 
 </LinearLayout>
