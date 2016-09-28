@@ -104,6 +104,7 @@ public class Constant {
 
     public static final String NEXT_ACTIVITY="next_activity";
     public static final String SETTING_BUNDLE="setting_bundle";
+    public static final String ARG="ARG";
 
 
     public static final String PAGE_START="page_start";
@@ -120,6 +121,7 @@ public class Constant {
 
     public static final int ACTIVITY_INTENT_PRIMARY_DIARY=1;
     public static final int ACTIVITY_INTENT_PRIMARY_GESTURE=2;
+
 
 
 

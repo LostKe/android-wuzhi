@@ -40,6 +40,8 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
 
     @BindView(R.id.ll_primary_getsture_edit)
     LinearLayout ll_primary_getsture_edit;
+    @BindView(R.id.ll_primary_getsture_edit_parent)
+    LinearLayout ll_primary_getsture_edit_parent;
 
     KProgressHUD hud;
     DBHelper dbHelper;
@@ -64,14 +66,19 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
     }
 
     private void init(Bundle bundle) {
-        int action = bundle.getInt(Constant.ACTIVITY_INTENT_PRIMARY);
+        int action=0;
+        if(bundle!=null){
+            action = bundle.getInt(Constant.ACTIVITY_INTENT_PRIMARY);
+        }
+
         switch (action) {
             case Constant.ACTIVITY_INTENT_PRIMARY_DIARY:
                 ll_primary_gesture_switch.setVisibility(View.GONE);
-                ll_primary_getsture_edit.setVisibility(View.GONE);
+                ll_primary_getsture_edit_parent.setVisibility(View.GONE);
                 initSwitch();
                 break;
-            case Constant.ACTIVITY_INTENT_PRIMARY_GESTURE:
+           case Constant.ACTIVITY_INTENT_PRIMARY_GESTURE:
+            default:
                 ll_primary_diary.setVisibility(View.GONE);
                 Handler handler=new Handler();
                 hud.show();
@@ -123,7 +130,7 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
 
     @Override
     String getToolBarTitle() {
-        return TextUtils.isEmpty(toolbarTitile) ? "设置" : toolbarTitile;
+        return TextUtils.isEmpty(toolbarTitile) ? "安全" : toolbarTitile;
     }
 
     @Override
@@ -295,13 +302,13 @@ public class PrimaryActivity extends BaseToolBarActivity implements SwitchView.O
             if(!primary_gesture_switch.isOpened()){
                 primary_gesture_switch.setOpened(true);
             }
-            ll_primary_getsture_edit.setVisibility(View.VISIBLE);
+            ll_primary_getsture_edit_parent.setVisibility(View.VISIBLE);
         }else{//关闭
             if(primary_gesture_switch.isOpened()){
                 primary_gesture_switch.setOpened(false);
             }
             //修改手势功能隐藏
-            ll_primary_getsture_edit.setVisibility(View.GONE);
+            ll_primary_getsture_edit_parent.setVisibility(View.GONE);
             dbHelper.clearGesture();
         }
     }

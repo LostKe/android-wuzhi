@@ -23,6 +23,13 @@ public class MyDiaryActivity extends BaseListActivity {
 
     DBHelper dbHelper=new DBHelper(this);
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

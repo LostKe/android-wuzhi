@@ -143,8 +143,13 @@ public class GestureVerifyActivity extends BaseToolBarActivity implements View.O
                 dbHelper.clearGesture();//将手势密码设置为空
                 //跳转到登录界面
                 Intent intent=new Intent();
-                intent.setClass(this,LoginActivity.class);
+                Bundle bundle = new Bundle();
+                intent.setClass(this, LoginActivity.class);
+                //重新登录完成后让其跳转到修改手势界面
+                bundle.putString(Constant.NEXT_ACTIVITY,PrimaryActivity.class.getName());
+                intent.putExtra(Constant.SETTING_BUNDLE,bundle);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

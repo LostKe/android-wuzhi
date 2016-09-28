@@ -1,24 +1,32 @@
 package zs.com.wuzhi.fragment;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.kaopiz.kprogresshud.KProgressHUD;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.FollowActivity;
+import zs.com.wuzhi.activity.GestureVerifyActivity;
 import zs.com.wuzhi.activity.LoginActivity;
 import zs.com.wuzhi.activity.MyDiaryActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
 import zs.com.wuzhi.activity.SettingActivity;
 import zs.com.wuzhi.application.AppApplication;
+import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.util.Constant;
+import zs.com.wuzhi.util.EncryptUtil;
 
 /**
  * Created by zhangshuqing on 16/7/19.
@@ -40,6 +48,8 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     @BindView(R.id.my_security)
     LinearLayout mMySercurity;
 
+    KProgressHUD hud;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me, null);
@@ -53,6 +63,7 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
         mDiary.setOnClickListener(this);
         mMyFollow.setOnClickListener(this);
         mMySercurity.setOnClickListener(this);
+        hud = KProgressHUD.create(getContext()).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
     }
 
 
@@ -70,6 +81,33 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
                 checkLogin(intent, SettingActivity.class);
                 break;
             case R.id.my_diary_ll:
+                if(AppApplication.context().isLogin()){
+                    //已经是登录状态 去校验手势
+                    DBHelper dbHelper=new DBHelper(getContext());
+
+                    Handler handler=new Handler();
+                    final String gestureKey= dbHelper.findGestureKey();
+
+                    if(!TextUtils.isEmpty(gestureKey)){
+                        hud.show();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent gIntent=new Intent();
+                                //去校验手势
+                                gIntent.setClass(getContext(), GestureVerifyActivity.class);
+                                //传入手势密码
+                                gIntent.putExtra(Constant.GESTURE_KEY, EncryptUtil.decrypt(gestureKey));
+                                startActivityForResult(gIntent, Constant.REQUESET_CODE_VERIFY_GESTURE);
+                                hud.dismiss();
+
+                            }
+                        });
+                        return;
+
+                    }
+                }
+
                 checkLogin(intent, MyDiaryActivity.class);
                 break;
             case R.id.my_fllow:
@@ -101,4 +139,18 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case Constant.REQUESET_CODE_VERIFY_GESTURE:
+                if(Activity.RESULT_OK==resultCode){
+                    //校验通过
+                    Intent intent=new Intent();
+                    intent.setClass(getContext(),MyDiaryActivity.class);
+                    startActivity(intent);
+                }
+                break;
+        }
+    }
 }
