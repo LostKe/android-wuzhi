@@ -34,6 +34,7 @@
         <activity android:name=".activity.FollowActivity"></activity>
         <activity android:name=".activity.GestureEditActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.GestureVerifyActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TopBarActivity"/>
     </application>
 
 </manifest>

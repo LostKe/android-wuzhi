@@ -71,7 +71,6 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
         initToolBar(toolbar);
         setContentView(mToolBarHelper.getContentView());
         setSupportActionBar(toolbar);
-        onCreateCustomToolBar();
     }
 
     protected void initToolBar(Toolbar toolbar) {
@@ -83,12 +82,7 @@ public abstract class BaseToolBarActivity extends AppCompatActivity implements O
         toolbar.setOnMenuItemClickListener(this);
     }
 
-    /**
-     * 设置toolbar的操作
-     */
-    protected void onCreateCustomToolBar() {
 
-    }
 
 
     public interface OnBackHomeClicklistener {
