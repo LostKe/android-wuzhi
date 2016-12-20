@@ -16,6 +16,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import zs.com.wuzhi.Helper.PermissionHelper;
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.bean.UserInfo;
@@ -159,11 +160,13 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
         Bundle bundle=new Bundle();
         switch (v.getId()){
             case R.id.ll_setting_pic:
-                //显示大头像，可以上传头像
-                bundle.putString(Constant.SELF_IMG_URL,selfImgUrl);
-                intent.setClass(this,SelfPhotoActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(PermissionHelper.checkPermission(this,PermissionHelper.REQUEST_WRITE_ES_PERMISSION)){
+                    //显示大头像，可以上传头像
+                    bundle.putString(Constant.SELF_IMG_URL,selfImgUrl);
+                    intent.setClass(this,SelfPhotoActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
                     break;
             case R.id.ll_setting_nickname:
                 //修改昵称
@@ -207,5 +210,22 @@ public class SettingActivity extends BaseToolBarActivity implements View.OnClick
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == PermissionHelper.REQUEST_WRITE_ES_PERMISSION) {
+            if (grantResults.length > 0 && PermissionHelper.checkAllPermissionResult(grantResults)) {
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putString(Constant.SELF_IMG_URL,selfImgUrl);
+                intent.setClass(this,SelfPhotoActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else {
+                PermissionHelper.showAddPhotoDialog(this);
+            }
+        }
+    }
+
 
 }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,6 +20,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -227,10 +227,10 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
 
     private void startImagePick() {
         Intent intent = new Intent();
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, REQUEST_CODE_GETIMAGE_BYCROP);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GETIMAGE_BYCROP);
     }
 
 
@@ -259,30 +259,38 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
         WindowManager windowManager= (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         int width=windowManager.getDefaultDisplay().getWidth();//屏幕宽度
         int height=windowManager.getDefaultDisplay().getHeight();
-        Intent intent = new Intent("com.android.camera.action.CROP");//调用系统的图片裁剪功能
+//        Intent intent = new Intent("com.android.camera.action.CROP");//调用系统的图片裁剪功能
+//
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){//原本uri返回的是file:///...来着的 android4.4返回的是content:///...
+//            //这里需要 指定到file
+//            String path=ImageUtil.getImagePath(data,SelfPhotoActivity.this);
+//            intent.setDataAndType(Uri.fromFile(new File(path)),"image/*");
+//        }else {
+//            intent.setDataAndType(data, "image/*");
+//        }
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){//原本uri返回的是file:///...来着的 android4.4返回的是content:///...
-            //这里需要 指定到file
-            String path=ImageUtil.getImagePath(data,SelfPhotoActivity.this);
-            intent.setDataAndType(Uri.fromFile(new File(path)),"image/*");
-        }else {
-            intent.setDataAndType(data, "image/*");
-        }
+        UCrop.Options options = new UCrop.Options();
+        UCrop.of(data, getUploadTempFile())
+                .withMaxResultSize(width, height)
+                .withOptions(options)
+                .withAspectRatio(width, height)
+                .start(this,REQUEST_CODE_GETIMAGE_BYSDCARD);
 
-        intent.putExtra("output", this.getUploadTempFile(data));
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", width);// 裁剪框比例
-        intent.putExtra("aspectY", height);
-        intent.putExtra("outputX", width);// 输出图片大小
-        intent.putExtra("outputY", height);
-        intent.putExtra("scale", true);// 去黑边
-        intent.putExtra("scaleUpIfNeeded", true);// 去黑边
-        //intent.putExtra("return-data", true); //将数据保留到Bitma 中返回
-        startActivityForResult(intent, REQUEST_CODE_GETIMAGE_BYSDCARD);//裁剪完成 开始上传图片
+//        intent.putExtra("output", this.getUploadTempFile());
+//        intent.putExtra("crop", "true");
+//        intent.putExtra("aspectX", width);// 裁剪框比例
+//        intent.putExtra("aspectY", height);
+//        intent.putExtra("outputX", width);// 输出图片大小
+//        intent.putExtra("outputY", height);
+//        intent.putExtra("scale", true);// 去黑边
+//        intent.putExtra("scaleUpIfNeeded", true);// 去黑边
+//        //intent.putExtra("return-data", true); //将数据保留到Bitma 中返回
+//        startActivityForResult(intent, REQUEST_CODE_GETIMAGE_BYSDCARD);//裁剪完成 开始上传图片
     }
 
+
     // 裁剪头像的绝对路径
-    private Uri getUploadTempFile(Uri uri) {
+    private Uri getUploadTempFile() {
         if (!checkSdCardMounted()) {
             Toast.makeText(this, "无法保存上传的头像，请检查SD卡是否挂载", Toast.LENGTH_SHORT).show();
             return null;
@@ -295,6 +303,7 @@ public class SelfPhotoActivity extends BaseToolBarActivity {
         protraitFile = new File(protraitPath);
         return Uri.fromFile(protraitFile);
     }
+
 
 
 

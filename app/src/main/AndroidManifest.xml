@@ -35,6 +35,12 @@
         <activity android:name=".activity.GestureEditActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.GestureVerifyActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.TopBarActivity"/>
+
+        <!-- tool-->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>
