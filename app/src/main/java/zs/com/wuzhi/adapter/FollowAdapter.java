@@ -11,15 +11,19 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import org.jsoup.helper.StringUtil;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.DiaryActivity;
+import zs.com.wuzhi.bean.PersonDiary;
 import zs.com.wuzhi.bean.UserInfo;
 import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.util.Constant;
+import zs.com.wuzhi.util.WuzhiSprider;
 import zs.com.wuzhi.widget.MenuDialog;
 import zs.com.wuzhi.widget.PromptDialog;
 
@@ -72,10 +76,12 @@ public class FollowAdapter extends BaseListAdapter<UserInfo>  {
                    menuDialog.setCancelable(true);
                break;
                case R.id.follow_item_ll:
+                   String userId=userInfo.getUserId();
                    Intent intent=new Intent();
                    intent.setClass(mCallback.getContext(), DiaryActivity.class);
-                   intent.putExtra(Constant.USER_ID,userInfo.getUserId());
+                   intent.putExtra(Constant.USER_ID,userId);
                    intent.putExtra(Constant.TOOL_BAR_TITLE,"关注列表");
+
                    mCallback.getContext().startActivity(intent);
                    break;
            }
@@ -84,6 +90,9 @@ public class FollowAdapter extends BaseListAdapter<UserInfo>  {
        }
    }
 
+    /**
+     * 点击取消关注
+     */
     class OnMenuClickListener implements View.OnClickListener{
         String  userId;
         int position;

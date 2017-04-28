@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -199,9 +200,13 @@ public class DiaryActivity extends BaseToolBarActivity implements View.OnClickLi
             this.user_id = user_id;
         }
 
+        //TODO 当关注的人取消公开日记后的处理方式
         @Override
         public void run() {
             PersonDiary personDiary = WuzhiSprider.getPersonDiaryById(user_id);
+            if(personDiary.getUserName()==null || TextUtils.isEmpty(personDiary.getUserName())){
+                Toast.makeText(getApplicationContext(),"用户数据获取失败",Toast.LENGTH_SHORT).show();
+            }
             Message msg = Message.obtain();
             msg.getData().putSerializable(PERSON_DIARY, personDiary);
             handler.sendMessage(msg);
