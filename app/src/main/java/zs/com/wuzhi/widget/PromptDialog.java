@@ -21,6 +21,7 @@ public class PromptDialog extends KProgressHUD {
     private Context context;
     private int imgResId;
     private String title;
+    DialogDismissListener listener;
 
     public PromptDialog(Context context) {
         super(context);
@@ -55,8 +56,19 @@ public class PromptDialog extends KProgressHUD {
             @Override
             public void run() {
                 hud.dismiss();
+                if(listener!=null){
+                    listener.onDismiss();
+                }
             }
         },DEFAULT_DISMISS_TIME);
 
+    }
+
+    public void setDialogDismissListener(DialogDismissListener listener){
+        this.listener=listener;
+    }
+
+    public interface DialogDismissListener{
+        public void onDismiss();
     }
 }

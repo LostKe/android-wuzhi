@@ -16,6 +16,7 @@ import zs.com.wuzhi.R;
 import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.util.ResponseUtil;
 import zs.com.wuzhi.util.WuzhiApi;
+import zs.com.wuzhi.widget.PromptDialog;
 
 /**
  * Created by zhangshuqing on 16/8/6.
@@ -101,7 +102,18 @@ public class AddDiaryActivity  extends BaseToolBarActivity{
                                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                         if(302==statusCode){
                                             //获取到重定向状态码，表示成功
-                                            finish();
+                                            PromptDialog promptDialog = new PromptDialog(AddDiaryActivity.this,R.drawable.card_icon_addtogroup_confirm,"发表成功");
+
+
+                                            promptDialog.showDialog();
+
+                                            promptDialog.setDialogDismissListener(new PromptDialog.DialogDismissListener() {
+                                                @Override
+                                                public void onDismiss() {
+                                                    finish();
+                                                }
+                                            });
+
                                         }else{
                                             Toast.makeText(getApplicationContext(),"发表失败，请稍后在试!",Toast.LENGTH_SHORT).show();
                                         }

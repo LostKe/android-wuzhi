@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zs.com.wuzhi.widget.Topbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:topbar="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/topbar"
+    android:background="@color/colorPrimaryDark"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    topbar:left_button="@mipmap/ic_arrow_back_white_24dp"
+    topbar:right_button="@drawable/icon_pic_menu_lower"
+    topbar:text_size="15"
+    topbar:text_color="@color/white"
+    topbar:left_text="吾志"
+    topbar:right_text="完成"
+    >
+</zs.com.wuzhi.widget.Topbar>
