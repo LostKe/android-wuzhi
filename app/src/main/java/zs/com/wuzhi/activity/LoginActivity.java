@@ -34,7 +34,7 @@ import zs.com.wuzhi.util.WuzhiApi;
  * Created by zhangshuqing on 16/7/25.
  */
 public class LoginActivity extends BaseToolBarActivity implements View.OnClickListener ,GT3GeetestUtilsBind.GT3Listener{
-    //TODO 需要去查找这两条url 
+    //TODO 需要去查找这两条url
     private static final String captchaURL = "http://www.geetest.com/demo/gt/register-slide";
     // 设置二次验证的URL，需替换成自己的服务器URL
     private static final String validateURL = "http://www.geetest.com/demo/gt/validate-slide";
@@ -61,6 +61,8 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
         init();
         gt3GeetestUtils.setGtListener(this);
         mIntent=getIntent();
+        //TODO 需要登录
+//        bt_login.setOnClickListener(this);
 
     }
 
