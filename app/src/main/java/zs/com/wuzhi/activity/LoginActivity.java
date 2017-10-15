@@ -10,6 +10,14 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.geetest.gt3unbindsdk.Bind.GT3GeetestBind;
+import com.geetest.gt3unbindsdk.Bind.GT3GeetestUtilsBind;
+import com.geetest.gt3unbindsdk.Bind.GT3Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +33,11 @@ import zs.com.wuzhi.util.WuzhiApi;
 /**
  * Created by zhangshuqing on 16/7/25.
  */
-public class LoginActivity extends BaseToolBarActivity implements View.OnClickListener {
+public class LoginActivity extends BaseToolBarActivity implements View.OnClickListener ,GT3GeetestUtilsBind.GT3Listener{
+    //TODO 需要去查找这两条url 
+    private static final String captchaURL = "http://www.geetest.com/demo/gt/register-slide";
+    // 设置二次验证的URL，需替换成自己的服务器URL
+    private static final String validateURL = "http://www.geetest.com/demo/gt/validate-slide";
 
     @BindView(R.id.et_username)
     AppCompatEditText userName;
@@ -40,20 +52,44 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     Intent mIntent;
 
+    private GT3GeetestUtilsBind gt3GeetestUtils;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         init();
+        gt3GeetestUtils.setGtListener(this);
         mIntent=getIntent();
 
     }
 
     private void init() {
+        /**
+         * 初始化
+         * 务必放在onCreate方法里面执行
+         */
+        gt3GeetestUtils = new GT3GeetestUtilsBind(LoginActivity.this);
+        gt3GeetestUtils.gtDologo(captchaURL, validateURL,null);//加载验证码之前判断有没有logo
+
+        /**
+         * 点击调起验证
+         */
+        bt_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gt3GeetestUtils.getGeetest(LoginActivity.this);
+                //设置是否可以点击屏幕边缘关闭验证码
+                gt3GeetestUtils.setDialogTouch(true);
+
+            }
+        });
+
+
+
         AppApplication application=AppApplication.context();
         userName.setText(application.getProperty(Constant.USER_NAME));
-        bt_login.setOnClickListener(this);
+        //bt_login.setOnClickListener(this);
     }
 
     @Override
@@ -155,5 +191,94 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void gt3CloseDialog() {
 
+    }
+
+    @Override
+    public void gt3CancelDialog() {
+
+    }
+
+    @Override
+    public void gt3DialogReady() {
+
+    }
+
+    @Override
+    public void gt3FirstGo() {
+
+    }
+
+    @Override
+    public void gt3FirstResult(JSONObject jsonObject) {
+
+    }
+
+    @Override
+    public Map<String, String> gt3SecondResult() {
+        return null;
+    }
+
+    @Override
+    public void gt3GetDialogResult(String s) {
+
+    }
+
+    @Override
+    public void gt3GetDialogResult(boolean b, String result) {
+        boolean success=b;
+        System.out.println(b+":"+result);
+    }
+
+    @Override
+    public void gt3DialogOnError(String s) {
+        gt3GeetestUtils.cancelAllTask();
+    }
+
+    @Override
+    public void gt3DialogSuccessResult(String result) {
+        if(!TextUtils.isEmpty(result)) {
+            try {
+                JSONObject jobj = new JSONObject(result);
+                String sta = jobj.getString("status");
+                if ("success".equals(sta)) {
+                    gt3GeetestUtils.gt3TestFinish();
+                } else {
+                    gt3GeetestUtils.gt3TestClose();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            gt3GeetestUtils.gt3TestClose();
+        }
+        Toast.makeText(LoginActivity.this,result,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void gt3AjaxResult(String s) {
+
+    }
+
+    @Override
+    public Map<String, String> captchaApi1() {
+        return null;
+    }
+
+    @Override
+    public boolean gtSetIsCustom() {
+        return false;
+    }
+
+    @Override
+    public void gereg_21() {
+
+    }
+
+    @Override
+    public void gt3GeetestStatisticsJson(JSONObject jsonObject) {
+
+    }
 }

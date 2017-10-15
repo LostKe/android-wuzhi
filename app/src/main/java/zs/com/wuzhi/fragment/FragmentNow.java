@@ -26,6 +26,8 @@ import java.util.List;
 
 import zs.com.wuzhi.R;
 import zs.com.wuzhi.activity.DiaryActivity;
+import zs.com.wuzhi.activity.LoginActivity;
+import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.bean.Item;
 import zs.com.wuzhi.util.Constant;
 import zs.com.wuzhi.util.ConvertUtil;
@@ -91,6 +93,12 @@ public class FragmentNow extends Fragment implements AdapterView.OnItemClickList
         bundle.putString(Constant.USER_ID,userId);
         intent.putExtras(bundle);
         intent.setClass(getContext(), DiaryActivity.class);
+        if (!AppApplication.context().isLogin()) {
+            //未登录
+            intent.setClass(getContext(), LoginActivity.class);
+            bundle.putString(Constant.NEXT_ACTIVITY, DiaryActivity.class.getName());
+            intent.putExtra(Constant.SETTING_BUNDLE,bundle);
+        }
         startActivity(intent);
     }
 
