@@ -72,8 +72,8 @@ public class AppApplication extends Application {
         pwd=EncryptUtil.decrypt(pwd);
 
         if(!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(pwd)){
-
-            WuzhiApi.login(userName, pwd, new AsyncHttpResponseHandler() {
+            //TODO  需要考虑如何保持
+            WuzhiApi.login(userName, pwd,null,null, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 

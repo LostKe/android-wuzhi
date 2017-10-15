@@ -17,6 +17,7 @@ import com.geetest.gt3unbindsdk.Bind.GT3Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -33,7 +34,7 @@ import zs.com.wuzhi.util.WuzhiApi;
 /**
  * Created by zhangshuqing on 16/7/25.
  */
-public class LoginActivity extends BaseToolBarActivity implements View.OnClickListener ,GT3GeetestUtilsBind.GT3Listener{
+public class LoginActivity extends BaseToolBarActivity implements View.OnClickListener, GT3GeetestUtilsBind.GT3Listener {
     //TODO 需要去查找这两条url
     private static final String captchaURL = "http://www.geetest.com/demo/gt/register-slide";
     // 设置二次验证的URL，需替换成自己的服务器URL
@@ -53,14 +54,15 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
     Intent mIntent;
 
     private GT3GeetestUtilsBind gt3GeetestUtils;
+
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         init();
         gt3GeetestUtils.setGtListener(this);
-        mIntent=getIntent();
+        mIntent = getIntent();
         //TODO 需要登录
 //        bt_login.setOnClickListener(this);
 
@@ -72,7 +74,7 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
          * 务必放在onCreate方法里面执行
          */
         gt3GeetestUtils = new GT3GeetestUtilsBind(LoginActivity.this);
-        gt3GeetestUtils.gtDologo(captchaURL, validateURL,null);//加载验证码之前判断有没有logo
+        gt3GeetestUtils.gtDologo(captchaURL, validateURL, null);//加载验证码之前判断有没有logo
 
         /**
          * 点击调起验证
@@ -89,9 +91,6 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
 
 
-        AppApplication application=AppApplication.context();
-        userName.setText(application.getProperty(Constant.USER_NAME));
-        //bt_login.setOnClickListener(this);
     }
 
     @Override
@@ -125,12 +124,13 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
                 }
                 hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setLabel("Please wait").setCancellable(false);
                 hud.show();
-                String userName_text=userName.getText().toString().trim();
-                String pwd= password.getText().toString().trim();
-                AppApplication application=AppApplication.context();
-                application.setProperty(Constant.USER_NAME,userName_text);
+                String userName_text = userName.getText().toString().trim();
+                String pwd = password.getText().toString().trim();
+                AppApplication application = AppApplication.context();
+                application.setProperty(Constant.USER_NAME, userName_text);
                 application.setProperty(Constant.PASS_WORD, EncryptUtil.encrypt(pwd));
-                WuzhiApi.login(userName_text, pwd, handler);
+                //TODO 这里需要设置 验证相关的参数
+                WuzhiApi.login(userName_text, pwd, null, null, handler);
                 break;
         }
     }
@@ -139,34 +139,34 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             hud.dismiss();
-            if(200==statusCode){
+            if (200 == statusCode) {
                 String content = new String(responseBody);
-                String loginMsg= ResponseUtil.getLoginMessage(content);
-                Toast.makeText(getApplicationContext(),loginMsg,Toast.LENGTH_SHORT).show();
+                String loginMsg = ResponseUtil.getLoginMessage(content);
+                Toast.makeText(getApplicationContext(), loginMsg, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             hud.dismiss();
-            if(302==statusCode){//状态码302 重定向 表示登录成功
-                String set_cookie=ResponseUtil.getCookie(headers);
-                AppApplication application=AppApplication.context();
-                application.setProperty(Constant.SET_COOKIE,set_cookie);
+            if (302 == statusCode) {//状态码302 重定向 表示登录成功
+                String set_cookie = ResponseUtil.getCookie(headers);
+                AppApplication application = AppApplication.context();
+                application.setProperty(Constant.SET_COOKIE, set_cookie);
                 application.setLoginStatu(true);
                 application.refreshCookie();
-                if(mIntent!=null && mIntent.getBundleExtra(Constant.SETTING_BUNDLE)!=null){
-                    Bundle bundle=mIntent.getBundleExtra(Constant.SETTING_BUNDLE);
-                    String next_activity_name=bundle.getString(Constant.NEXT_ACTIVITY);
-                    if(!TextUtils.isEmpty(next_activity_name)){
-                        Intent next=new Intent();
-                        next.setClassName(getApplicationContext(),next_activity_name);
+                if (mIntent != null && mIntent.getBundleExtra(Constant.SETTING_BUNDLE) != null) {
+                    Bundle bundle = mIntent.getBundleExtra(Constant.SETTING_BUNDLE);
+                    String next_activity_name = bundle.getString(Constant.NEXT_ACTIVITY);
+                    if (!TextUtils.isEmpty(next_activity_name)) {
+                        Intent next = new Intent();
+                        next.setClassName(getApplicationContext(), next_activity_name);
                         startActivity(next);
                     }
                 }
 
                 finish();
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "网络错误", Toast.LENGTH_SHORT).show();
             }
         }
@@ -228,10 +228,41 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     }
 
+    /**
+     * 自定义二次验证，当gtSetIsCustom为ture时执行这里面的代码
+     */
     @Override
     public void gt3GetDialogResult(boolean b, String result) {
-        boolean success=b;
-        System.out.println(b+":"+result);
+        if (b) {
+            //利用异步进行解析这result进行二次验证，结果成功后调用gt3GeetestUtils.gt3TestFinish()方法调用成功后的动画，然后在gt3DialogSuccess执行成功之后的结果
+            try {
+                JSONObject  res_json = new JSONObject(result);
+                Map<String, String> validateParams = new HashMap<>();
+
+                validateParams.put("geetest_challenge", res_json.getString("geetest_challenge"));
+
+                validateParams.put("geetest_validate", res_json.getString("geetest_validate"));
+
+                validateParams.put("geetest_seccode", res_json.getString("geetest_seccode"));
+
+
+                AppApplication application = AppApplication.context();
+                userName.setText(application.getProperty(Constant.USER_NAME));
+                bt_login.setOnClickListener(this);
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //  二次验证成功调用
+            gt3GeetestUtils.gt3TestFinish();
+
+
+        } else {
+            //  二次验证失败调用
+            gt3GeetestUtils.gt3TestClose();
+        }
     }
 
     @Override
@@ -241,7 +272,7 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     @Override
     public void gt3DialogSuccessResult(String result) {
-        if(!TextUtils.isEmpty(result)) {
+        if (!TextUtils.isEmpty(result)) {
             try {
                 JSONObject jobj = new JSONObject(result);
                 String sta = jobj.getString("status");
@@ -253,10 +284,10 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             gt3GeetestUtils.gt3TestClose();
         }
-        Toast.makeText(LoginActivity.this,result,Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -271,7 +302,7 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
     @Override
     public boolean gtSetIsCustom() {
-        return false;
+        return true;
     }
 
     @Override

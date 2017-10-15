@@ -72,6 +72,10 @@ public class Constant {
     public static final String LOGIN = "https://wuzhi.me/login/";
     public static final String LOGIN_EMAIL = "email";
     public static final String LOGIN_PASSOWRD = "password";
+    public static final String GEETEST_CHALLENGE = "geetest_challenge";
+    public static final String GEETEST_VALIDATE = "geetest_validate";
+    public static final String GEETEST_SECCODE = "geetest_seccode";
+
 
     /**
      * 写日记 POST

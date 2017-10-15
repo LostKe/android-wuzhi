@@ -21,10 +21,13 @@ public class WuzhiApi {
      * @param password
      * @param handler
      */
-    public static void login(String username, String password, AsyncHttpResponseHandler handler) {
+    public static void login(String username, String password,String geetest_challenge,String geetest_validate, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put(Constant.LOGIN_EMAIL, username);
         params.put(Constant.LOGIN_PASSOWRD, password);
+        params.put(Constant.GEETEST_CHALLENGE,geetest_challenge);
+        params.put(Constant.GEETEST_VALIDATE,geetest_validate);
+        params.put(Constant.GEETEST_SECCODE,geetest_validate+"|jordan");
         ApiHttpClient.post(Constant.LOGIN, params, handler);
 
     }
