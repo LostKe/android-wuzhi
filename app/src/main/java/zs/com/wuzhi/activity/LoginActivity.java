@@ -10,9 +10,7 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.geetest.gt3unbindsdk.Bind.GT3GeetestBind;
 import com.geetest.gt3unbindsdk.Bind.GT3GeetestUtilsBind;
-import com.geetest.gt3unbindsdk.Bind.GT3Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,12 +61,14 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
         init();
         gt3GeetestUtils.setGtListener(this);
         mIntent = getIntent();
-        //TODO 需要登录
-//        bt_login.setOnClickListener(this);
+        bt_login.setOnClickListener(this);
 
     }
 
     private void init() {
+        //插入之前保存的用户名
+        AppApplication application = AppApplication.context();
+        userName.setText(application.getProperty(Constant.USER_NAME));
         /**
          * 初始化
          * 务必放在onCreate方法里面执行
@@ -79,15 +79,8 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
         /**
          * 点击调起验证
          */
-        bt_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gt3GeetestUtils.getGeetest(LoginActivity.this);
-                //设置是否可以点击屏幕边缘关闭验证码
-                gt3GeetestUtils.setDialogTouch(true);
+        bt_login.setOnClickListener(this);
 
-            }
-        });
 
 
 
@@ -122,15 +115,12 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
                 if (!preparedLogin()) {
                     return;
                 }
-                hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setLabel("Please wait").setCancellable(false);
-                hud.show();
-                String userName_text = userName.getText().toString().trim();
-                String pwd = password.getText().toString().trim();
-                AppApplication application = AppApplication.context();
-                application.setProperty(Constant.USER_NAME, userName_text);
-                application.setProperty(Constant.PASS_WORD, EncryptUtil.encrypt(pwd));
-                //TODO 这里需要设置 验证相关的参数
-                WuzhiApi.login(userName_text, pwd, null, null, handler);
+                //开始验证码
+                gt3GeetestUtils.getGeetest(LoginActivity.this);
+                //设置是否可以点击屏幕边缘关闭验证码
+                gt3GeetestUtils.setDialogTouch(true);
+
+
                 break;
         }
     }
@@ -247,11 +237,13 @@ public class LoginActivity extends BaseToolBarActivity implements View.OnClickLi
 
 
                 AppApplication application = AppApplication.context();
-                userName.setText(application.getProperty(Constant.USER_NAME));
-                bt_login.setOnClickListener(this);
-
-
-
+                hud = KProgressHUD.create(this).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setLabel("Please wait").setCancellable(false);
+                hud.show();
+                String userName_text = userName.getText().toString().trim();
+                String pwd = password.getText().toString().trim();
+                application.setProperty(Constant.USER_NAME, userName_text);
+                application.setProperty(Constant.PASS_WORD, EncryptUtil.encrypt(pwd));
+                WuzhiApi.login(userName_text, pwd, res_json.getString("geetest_challenge"), res_json.getString("geetest_validate"), handler);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
