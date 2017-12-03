@@ -92,6 +92,8 @@ public class Constant {
 
 
 
+    public static final String USER_PHONE_QUERY = "http://119.29.8.106:9090/query?code=%S";
+
 
     ////////////////////////
     public static final String USER_ID="user_id";

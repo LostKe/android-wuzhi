@@ -25,6 +25,7 @@ public class PermissionHelper {
     public static final int REQUEST_ACCESS_FINE_LOCATION_PERMISSION = 1;
     public static final int REQUEST_CAMERA_AND_WRITE_ES_PERMISSION = 2;
     public static final int REQUEST_WRITE_ES_PERMISSION = 3;
+    public static final int SEND_SMS = 4;
 
     public static boolean checkPermission(Fragment fragment, final int requestCode) {
         switch (requestCode) {
@@ -76,6 +77,19 @@ public class PermissionHelper {
                     }
                 }
                 break;
+            case SEND_SMS:
+                if (ContextCompat.checkSelfPermission(fragment.getActivity(),
+                        Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(fragment.getActivity(), Manifest.permission.SEND_SMS)) {
+                        fragment.requestPermissions(new String[]{Manifest.permission.SEND_SMS}, requestCode);
+                        return false;
+                    } else {
+                        fragment.requestPermissions(new String[]{Manifest.permission.SEND_SMS}, requestCode);
+                        return false;
+                    }
+                }
+                break;
+
         }
         return true;
     }
@@ -96,6 +110,20 @@ public class PermissionHelper {
                     }
                 }
                 break;
+
+            case SEND_SMS:
+                if (ContextCompat.checkSelfPermission(activity,
+                        Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.SEND_SMS)) {
+                        activity.requestPermissions(new String[]{Manifest.permission.SEND_SMS}, requestCode);
+                        return false;
+                    } else {
+                        activity.requestPermissions(new String[]{Manifest.permission.SEND_SMS}, requestCode);
+                        return false;
+                    }
+                }
+                break;
+
         }
         return true;
     }

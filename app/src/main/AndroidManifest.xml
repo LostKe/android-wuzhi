@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name=".application.AppApplication"
@@ -37,6 +38,8 @@
         <activity android:name=".activity.GestureEditActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.GestureVerifyActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.TopBarActivity"/>
+        <activity android:name=".activity.SmsNumberCheckActivity"/>
+        <activity android:name=".activity.SendSmsActivity"/>
 
         <!-- tool-->
         <activity

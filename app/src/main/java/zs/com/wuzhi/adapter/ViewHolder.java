@@ -8,6 +8,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -99,6 +100,12 @@ public class ViewHolder {
         tv.setVisibility(View.VISIBLE);
     }
 
+
+    public void setChecked(int viewId,boolean flag){
+        CheckBox checkBox = getView(viewId);
+        checkBox.setChecked(flag);
+    }
+
     // 给TextView设置文字
     public void setText(int viewId, SpannableString text) {
         if (text == null) return;
@@ -173,6 +180,7 @@ public class ViewHolder {
         Glide.with(context).load(url).transform(new GlideCircleTransform(context)).into(imageView);
 
     }
+
 
     public void setOnClick(int viewId, View.OnClickListener onClickListener) {
         View view = getView(viewId);

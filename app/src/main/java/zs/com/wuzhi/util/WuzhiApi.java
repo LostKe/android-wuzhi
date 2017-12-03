@@ -105,6 +105,16 @@ public class WuzhiApi {
 
 
     /**
+     *
+     * @param code
+     * @param handler
+     */
+    public static void getUserPhone(String code,AsyncHttpResponseHandler handler){
+        ApiHttpClient.get(String.format(Constant.USER_PHONE_QUERY,code),handler);
+    }
+
+
+    /**
      * 获取个人信息
      *
      * Response 中附带了个人信息

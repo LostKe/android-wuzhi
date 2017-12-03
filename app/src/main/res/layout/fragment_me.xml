@@ -53,5 +53,19 @@
     <include layout="@layout/linear_line"></include>
 
 
+    <LinearLayout
+        android:id="@+id/sms_send"
+        style="@style/linnerlayout_item"
+        >
+        <TextView
+            style="@style/linear_item_tv"
+            android:text="群发短信"/>
+        <ImageView
+            style="@style/arrow"/>
+
+    </LinearLayout>
+    <include layout="@layout/linear_line"></include>
+
+
 
 </LinearLayout>

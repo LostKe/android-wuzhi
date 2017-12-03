@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/follow_item_ll"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <CheckBox
+        android:id="@+id/checkbox_user_item"
+        android:padding="15dp"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/user_detail_uerName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="谎"/>
+        <TextView
+            android:id="@+id/user_detail_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="center"
+            android:text="13066937057"
+            android:textColor="@color/colorPrimary"/>
+    </LinearLayout>
+
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading_view"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        style="@style/AVLoadingIndicatorView.Small"
+        app:indicatorName="BallSpinFadeLoaderIndicator"
+        app:indicatorColor="@color/dark_1" />
+
+    <ImageView
+        android:id="@+id/img_send_state"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_access_time"/>
+
+
+
+
+
+</LinearLayout>

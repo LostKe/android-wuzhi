@@ -23,6 +23,7 @@ import zs.com.wuzhi.activity.LoginActivity;
 import zs.com.wuzhi.activity.MyDiaryActivity;
 import zs.com.wuzhi.activity.PrimaryActivity;
 import zs.com.wuzhi.activity.SettingActivity;
+import zs.com.wuzhi.activity.SmsNumberCheckActivity;
 import zs.com.wuzhi.application.AppApplication;
 import zs.com.wuzhi.db.DBHelper;
 import zs.com.wuzhi.util.Constant;
@@ -48,6 +49,9 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
     @BindView(R.id.my_security)
     LinearLayout mMySercurity;
 
+    @BindView(R.id.sms_send)
+    LinearLayout smsSend;
+
     KProgressHUD hud;
 
     @Override
@@ -63,6 +67,7 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
         mDiary.setOnClickListener(this);
         mMyFollow.setOnClickListener(this);
         mMySercurity.setOnClickListener(this);
+        smsSend.setOnClickListener(this);
         hud = KProgressHUD.create(getContext()).setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).setCancellable(true);
     }
 
@@ -119,6 +124,10 @@ public class FragmentMe extends Fragment implements View.OnClickListener {
                 bundle.putString(Constant.TOOL_BAR_TITLE,"安全");
                 intent.putExtras(bundle);
                 checkLogin(intent, PrimaryActivity.class);
+                break;
+            case R.id.sms_send:
+                intent.setClass(getContext(),SmsNumberCheckActivity.class);
+
 
         }
         startActivity(intent);

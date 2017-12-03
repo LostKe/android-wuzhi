@@ -10,31 +10,31 @@
         android:orientation="vertical"
         android:padding="15dp">
 
+        <EditText
+            android:id="@+id/et_sms_msg"
+            android:gravity="top|left"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:hint="输入短信内容"
+            android:textSize="18sp"
+            android:background="@drawable/edit_bg"/>
+
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_username"
+            android:id="@+id/et_sms_check_code"
             android:singleLine="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:inputType="textEmailAddress"
-            android:hint="邮箱" />
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/et_password"
-            android:singleLine="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:hint="密码"
-            android:inputType="textPassword" />
+            android:hint="请输入CODE"
+            android:background="@drawable/edit_bg"/>
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_sms_check"
             style="@style/button_common_blue"
             android:layout_marginTop="20dp"
-            android:text="登录" />
+            android:text="获取联系人" />
     </LinearLayout>
 
 </ScrollView>
