@@ -198,13 +198,7 @@ public class SendSmsActivity extends BaseToolBarActivity implements View.OnClick
      * @param message
      */
     public void sendSMS(int position, String phoneNumber, String message) {
-        try {
 
-            adapter.notifyDataSetChanged();
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         //获取短信管理器
         android.telephony.SmsManager smsManager = android.telephony.SmsManager.getDefault();
         //拆分短信内容（手机短信长度限制）
@@ -212,7 +206,7 @@ public class SendSmsActivity extends BaseToolBarActivity implements View.OnClick
         Intent itSend = new Intent(SENT_SMS_ACTION);
         itSend.putExtra(KEY_PHONENUM, phoneNumber);
         itSend.putExtra(INDEX, position);
-        PendingIntent sentPI = PendingIntent.getBroadcast(getApplicationContext(), 0, itSend, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent sentPI = PendingIntent.getBroadcast(getApplicationContext(), position, itSend, PendingIntent.FLAG_UPDATE_CURRENT);
         for (String text : divideContents) {
             smsManager.sendTextMessage(phoneNumber, null, text, sentPI, null);
         }
@@ -253,6 +247,9 @@ public class SendSmsActivity extends BaseToolBarActivity implements View.OnClick
 
 
         }
+
+
+
     }
 
 
@@ -276,4 +273,9 @@ public class SendSmsActivity extends BaseToolBarActivity implements View.OnClick
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
 }

@@ -41,6 +41,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.alibaba:fastjson:1.2.16'
-    compile(name: 'gt3geetest_sdk', ext: 'aar')
+    //compile(name: 'gt3geetest_sdk', ext: 'aar')
     //compile 'com.squareup.okhttp3:okhttp:3.3.1'
 }
